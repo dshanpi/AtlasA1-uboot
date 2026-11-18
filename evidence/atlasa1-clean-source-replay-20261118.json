@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-18",
+  "comparison": "Clean extraction on Linux followed by prepare_atlas_release_sources.py and recursive content comparison to the media-v30 kernel/PowerVR or CPU-D U-Boot build source. Separate output trees hold generated build files.",
+  "components": [
+    {
+      "component": "linux",
+      "upstream": "1cdda838e8475edf89b73ff0cc952005dd0b1fa7",
+      "recipe": "patches/linux/media-v30-replay",
+      "board_files": 317,
+      "patched_baseline_inputs": 21,
+      "receipt_sha256": "9931ecb99bd61a0f7908991ef2bd4017bc4e025ce3e01130ca0629ea82908082",
+      "patch_sha256": "2bcee920f3a6989d94812d94b088abf7e61906b8197fdaa6a5b4bbd461980198",
+      "all_regular_files_match": true,
+      "all_symlink_targets_match_after_resolution": true,
+      "upstream_archive_sha256": "c41bdd52b610c75613effe80c6abf236efce706b3304fe2f023bf912413f9f6e",
+      "config_sha256": "1ac4ebd1a1eb188db8b8b093c89c2bb766cf3f1079838cdf86da9b2d3879fa70",
+      "tina_display_inputs": 264,
+      "tina_display_manifest_sha256": "bf48030b50e4cf92d52c204f887ba97835f27d051fce8029a7c0b2cb0c4174e1"
+    },
+    {
+      "component": "u-boot",
+      "upstream": "5508406582f6f7120dce0c4b3059819a41788db2",
+      "recipe": "patches/u-boot/media-v28-replay",
+      "board_files": 21,
+      "patched_baseline_inputs": 3,
+      "receipt_sha256": "7ba7590d3e90f04a6b559f77cb29cd674d521f6b9612fb88af2fd570df0a37cb",
+      "patch_sha256": "db5906d6b0fb0660fc9a41a18c25c148fb74b57e31def5e8cd1198e2e302cab1",
+      "all_regular_files_match": true,
+      "all_symlink_targets_match_after_resolution": true,
+      "upstream_archive_sha256": "af3cca26c2ea2a352efc05980d991b7310959dc431c427ad3250e832a221abd8",
+      "config_sha256": "48bb5d49baeea9f3f1000980e8f4f6352d9511b51598439a6d3ed2bdd32271a7"
+    },
+    {
+      "component": "pvr",
+      "upstream": "Tina IMG BXM 24.2 DDK: bsp/modules/gpu/img-bxm/linux/rogue_km",
+      "recipe": "patches/linux/media-v30-pvr-replay",
+      "board_files": 16,
+      "patched_baseline_inputs": 16,
+      "receipt_sha256": "b1a4138d432ad4d38f6186769755b067996310210ee03ebb721f368d1b3356e6",
+      "patch_sha256": "143cae075d6607816fb818f2fb5c3956654e62f18a661172cbc60310ccd5a9f6",
+      "all_regular_files_match": true,
+      "all_symlink_targets_match_after_resolution": true
+    }
+  ],
+  "framework": {
+    "commit": "2d3dd98fb4a86d4d884cec4fc2f5de28a37a8736",
+    "public_patch_sha256": "d93dca453ffe194923a22faf1cdd6dff1289bd8895a817692bf94c2fef7da473",
+    "clean_index_git_apply_check": true
+  },
+  "scope": "Historical source reproduction. Booting the Ubuntu 26.04 image and hardware playback require separate board measurements."
+}

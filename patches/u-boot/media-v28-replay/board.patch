@@ -1,0 +1,2088 @@
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 1b474a346bf2fb573237db65f933e9d26784930f..74991546cecef52b100a2a67f98069650fa6997e 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -2203,6 +2203,20 @@ config TARGET_XENGUEST_ARM64
+ 	select XEN_SERIAL
+ 	imply OF_HAS_PRIOR_STAGE
+ 
++config TARGET_T736_BRINGUP
++	bool "T736 custom board RAM bring-up"
++	select ARM64
++	select DM
++	select DM_SERIAL
++	select OF_CONTROL
++	select SYS_NS16550
++	select SYS_NS16550_MEM32
++	select LINUX_KERNEL_IMAGE_HEADER
++	select HAS_CUSTOM_SYS_INIT_SP_ADDR
++	help
++	  RAM payload for the independently maintained T736 board port.
++	  A prior firmware stage must initialize DRAM, power and UART0.
++
+ config ARCH_GXP
+ 	bool "Support HPE GXP SoCs"
+ 	select DM
+@@ -2474,6 +2488,7 @@ source "board/phytium/durian/Kconfig"
+ source "board/phytium/pomelo/Kconfig"
+ source "board/phytium/pe2201/Kconfig"
+ source "board/xen/xenguest_arm64/Kconfig"
++source "board/t736/bringup/Kconfig"
+ 
+ source "arch/arm/Kconfig.debug"
+ 
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index 37d3b6fd3cce751f450d2e5c2d73c28d7ef061b9..229b757faccdc917969a2d9e3c21ebe1c1445945 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -1170,6 +1170,8 @@ dtb-$(CONFIG_TARGET_CORSTONE1000) += corstone1000-mps3.dtb \
+ 
+ dtb-$(CONFIG_TARGET_COREPRIMEVELTE) += pxa1908-samsung-coreprimevelte.dtb
+ 
++dtb-$(CONFIG_TARGET_T736_BRINGUP) += t736-bringup.dtb
++
+ include $(srctree)/scripts/Makefile.dts
+ 
+ # Add any required device tree compiler flags here
+diff --git a/arch/arm/dts/t736-bringup.dts b/arch/arm/dts/t736-bringup.dts
+new file mode 100644
+index 0000000000000000000000000000000000000000..43dbb79bc9a783a250213c1380ce7b729c29ea4b
+--- /dev/null
++++ b/arch/arm/dts/t736-bringup.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0+
++/dts-v1/;
++
++/ {
++	model = "T736 custom board RAM bring-up";
++	compatible = "allwinner,t736";
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	aliases { serial0 = &uart0; };
++	chosen { stdout-path = "serial0:115200n8"; };
++
++	memory@40000000 {
++		device_type = "memory";
++		reg = <0 0x40000000 2 0>;
++	};
++
++	mmc@4023000 {
++		compatible = "allwinner,t736-smhc3-bringup";
++		reg = <0 0x04023000 0 0x1000>;
++		bus-width = <8>;
++		non-removable;
++	};
++
++	uart0: serial@2500000 {
++		compatible = "snps,dw-apb-uart";
++		reg = <0 0x02500000 0 0x400>;
++		reg-shift = <2>;
++		reg-io-width = <4>;
++		clock-frequency = <24000000>;
++		bootph-all;
++	};
++};
+diff --git a/board/t736/bringup/Kconfig b/board/t736/bringup/Kconfig
+new file mode 100644
+index 0000000000000000000000000000000000000000..6630894c34742b3f89ae4eb713b4f86242760a58
+--- /dev/null
++++ b/board/t736/bringup/Kconfig
+@@ -0,0 +1,18 @@
++if TARGET_T736_BRINGUP
++
++config SYS_BOARD
++	default "bringup"
++
++config SYS_VENDOR
++	default "t736"
++
++config SYS_CONFIG_NAME
++	default "t736-bringup"
++
++config TEXT_BASE
++	default 0x52000000
++
++config LNX_KRNL_IMG_TEXT_OFFSET_BASE
++	default 0x40000000
++
++endif
+diff --git a/board/t736/bringup/Makefile b/board/t736/bringup/Makefile
+new file mode 100644
+index 0000000000000000000000000000000000000000..178b830c377afbc2e8fd645d91f8587f5692af8a
+--- /dev/null
++++ b/board/t736/bringup/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0+
++obj-y += board.o
++obj-y += cpuclock.o cpuclock_c.o twi.o a55clock_d.o t736-uboot-cpuclock-d.o
+diff --git a/board/t736/bringup/a55clock.h b/board/t736/bringup/a55clock.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..e97c1135b2110bbf59eb0448609a65f670946926
+--- /dev/null
++++ b/board/t736/bringup/a55clock.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef T736_A55CLOCK_H
++#define T736_A55CLOCK_H
++#include "cpuclock.h"
++
++#define T736_A55_CTRL UINT32_C(0x1000)
++#define T736_A55_CLK UINT32_C(0x101c)
++#define T736_A55_STAT UINT32_C(0x102c)
++#define T736_A55_ORIGINAL UINT32_C(0xf8801300)
++#define T736_A55_TARGET UINT32_C(0xf8802700)
++#define T736_A55_PLL_CLK UINT32_C(0x03000000)
++#define T736_A55_PPU(cpu) (UINT32_C(0x07052008) + (cpu) * UINT32_C(0x1000))
++#define T736_A55_GUARDS 19
++
++struct t736_a55clock_report {
++	uint32_t stage, crystal, before_ctrl, before_stat, before_clk;
++	uint32_t final_ctrl, final_stat, final_clk, ppu_before[8];
++	uint32_t guards_before[T736_A55_GUARDS];
++	struct t736_cpuclock_supply supply_before, supply_after;
++	uint32_t mutation_attempted, slow_verified, guard_failure;
++	int error, rollback_error;
++};
++
++/* Execute only on CPU0 A55 with interrupts masked and all other PPUs OFF.
++ * N19 -> N39 warm change, PLL ENABLE/LDO retained. Errors after mutation
++ * only select verified slow; never restore N19 or disable/restart the PLL.
++ * Caller must halt on every error after mutation (no secondary release).
++ */
++int t736_a55clock_prepare(const struct t736_cpuclock_io *io,
++			 struct t736_a55clock_report *report);
++#endif
+diff --git a/board/t736/bringup/a55clock_d.c b/board/t736/bringup/a55clock_d.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..1774128eade3c5547724783ae7cb5d8489adc9b2
+--- /dev/null
++++ b/board/t736/bringup/a55clock_d.c
+@@ -0,0 +1,252 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Early single-core A55 warm frequency change, independent of CPU hotplug. */
++#include "a55clock_d.h"
++
++#define BIT(n) (UINT32_C(1) << (n))
++#define UPDATE BIT(26)
++#define OUTPUT BIT(27)
++#define LOCK BIT(28)
++#define LOCK_EN BIT(29)
++#define LDO BIT(30)
++#define ENABLE BIT(31)
++#define N_MASK UINT32_C(0xff00)
++
++static const uint16_t guard_offsets[T736_A55_GUARDS] = {
++	0x0000, 0x0008, 0x000c,
++	0x1004, 0x1008, 0x1018,
++	0x2000, 0x2004, 0x2008, 0x2018, 0x201c, 0x202c,
++	0x3000, 0x3004, 0x3008, 0x3018, 0x301c, 0x302c, 0x3034,
++};
++
++static uint32_t rd(const struct t736_cpuclock_io *io, uint32_t off)
++{
++	return io->read32(io->ctx, T736_CPUCLOCK_BASE + off);
++}
++
++static int delay(const struct t736_cpuclock_io *io, uint32_t us)
++{
++	return io->delay_us(io->ctx, us) ? T736_CPUCLOCK_DELAY : 0;
++}
++
++static int trace_step(const struct t736_cpuclock_io *io,
++                      struct t736_a55clock_d_report *r, uint32_t step,
++                      uint32_t off, uint32_t before, uint32_t desired,
++                      uint32_t actual, int error)
++{
++ struct t736_a55clock_d_trace t = {step,off,before,desired,actual,
++  rd(io,T736_A55_CTRL),rd(io,T736_A55_STAT),rd(io,T736_A55_CLK),error};
++ if (r->trace_count < T736_A55_D_TRACES) r->trace[r->trace_count++] = t;
++ else error = T736_CPUCLOCK_GUARD;
++ if (error && !r->failure_recorded) {t.error=error;r->failed=t;r->failure_recorded=1;}
++ return error;
++}
++
++static int mux(const struct t736_cpuclock_io *io,
++               struct t736_a55clock_d_report *r, uint32_t step, uint32_t value)
++{
++ uint32_t before=rd(io,T736_A55_CLK),actual;
++ io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_A55_CLK,value);
++ actual=rd(io,T736_A55_CLK);
++ return trace_step(io,r,step,T736_A55_CLK,before,value,actual,
++                   actual==value?0:T736_CPUCLOCK_VERIFY);
++}
++
++static int stage(const struct t736_cpuclock_io *io,
++                 struct t736_a55clock_d_report *r, uint32_t step,
++                 uint32_t desired, uint32_t old_n, int may_latch)
++{
++ uint32_t before=rd(io,T736_A55_CTRL),actual=before,expected_before;
++ int rc=0;
++ switch(step) {
++ case 2: expected_before=T736_A55_ORIGINAL;break;
++ case 3: expected_before=0xe0801300;break;
++ case 4: expected_before=0xc0801300;break;
++ case 5: expected_before=0xc0802700;break;
++ case 8: expected_before=0xe0802700;break;
++ default: return trace_step(io,r,step,T736_A55_CTRL,before,desired,actual,T736_CPUCLOCK_INVALID);
++ }
++ /* ENABLE/LDO never change. The only widened N observations are the
++  * write-N and following LOCK_EN writes, both while OUTPUT is closed.
++  * The manual makes N R/W and UPDATE WAC; it does not promise old-N readback.
++  * No third N, unexpected gate, divider or reserved bit is accepted.
++  */
++ if ((desired&(ENABLE|LDO))!=(ENABLE|LDO) || (desired&(LOCK|UPDATE)) ||
++     ((before^expected_before)&~(LOCK|N_MASK)) ||
++     ((before&N_MASK)!=old_n && !(may_latch && (before&N_MASK)==0x2700)) ||
++     (may_latch && ((step!=4 && step!=5) || old_n!=0x1300 ||
++      (desired&N_MASK)!=0x2700 || (desired&OUTPUT) || (before&OUTPUT) ||
++      (before&LOCK_EN) || (!!(desired&LOCK_EN)!=(step==5)))))
++  return trace_step(io,r,step,T736_A55_CTRL,before,desired,actual,T736_CPUCLOCK_PRECONDITION);
++ io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_A55_CTRL,desired);
++ actual=rd(io,T736_A55_CTRL);
++ if (((actual^desired)&~(LOCK|N_MASK)) ||
++     ((actual&N_MASK)!=old_n && !(may_latch && (actual&N_MASK)==(desired&N_MASK))))
++  rc=T736_CPUCLOCK_VERIFY;
++ return trace_step(io,r,step,T736_A55_CTRL,before,desired,actual,rc);
++}
++
++static int commit(const struct t736_cpuclock_io *io,
++                  struct t736_a55clock_d_report *r, uint32_t desired)
++{
++ uint32_t before=rd(io,T736_A55_CTRL),actual=before;
++ int rc=T736_CPUCLOCK_TIMEOUT;
++ if ((desired&(ENABLE|LDO|LOCK_EN))!=(ENABLE|LDO|LOCK_EN) ||
++     (desired&(LOCK|UPDATE|OUTPUT)) || (desired&N_MASK)!=0x2700 ||
++     ((before^desired)&~(LOCK|N_MASK)) ||
++     ((before&N_MASK)!=0x1300 && (before&N_MASK)!=0x2700))
++  return trace_step(io,r,6,T736_A55_CTRL,before,desired,actual,T736_CPUCLOCK_PRECONDITION);
++ if(delay(io,1)) return trace_step(io,r,6,T736_A55_CTRL,before,desired,actual,T736_CPUCLOCK_DELAY);
++ io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_A55_CTRL,desired|UPDATE);
++ for(unsigned int i=0;i<1000;i++) {
++  actual=rd(io,T736_A55_CTRL);
++  if(!(actual&UPDATE)) {
++   rc=((actual^desired)&~LOCK) || ((rd(io,T736_A55_STAT)^desired)&~LOCK)
++      ?T736_CPUCLOCK_VERIFY:0;
++   break;
++  }
++  if(delay(io,10)){rc=T736_CPUCLOCK_DELAY;break;}
++ }
++ return trace_step(io,r,6,T736_A55_CTRL,before,desired|UPDATE,actual,rc);
++}
++
++static int ready(const struct t736_cpuclock_io *io,
++                 struct t736_a55clock_d_report *r, uint32_t step, uint32_t desired)
++{
++ unsigned int consecutive=0;
++ uint32_t expected=desired|LOCK,before=rd(io,T736_A55_CTRL);
++ int rc=T736_CPUCLOCK_TIMEOUT;
++ for(unsigned int i=0;i<7000;i++) {
++  consecutive=rd(io,T736_A55_CTRL)==expected && rd(io,T736_A55_STAT)==expected?consecutive+1:0;
++  if(consecutive==3) {
++   rc=delay(io,20);
++   if(!rc && (rd(io,T736_A55_CTRL)!=expected || rd(io,T736_A55_STAT)!=expected))rc=T736_CPUCLOCK_VERIFY;
++   break;
++  }
++  if(delay(io,10)){rc=T736_CPUCLOCK_DELAY;break;}
++ }
++ return trace_step(io,r,step,T736_A55_CTRL,before,expected,rd(io,T736_A55_CTRL),rc);
++}
++
++static int supply(const struct t736_cpuclock_io *io, struct t736_cpuclock_supply *s)
++{
++	static const uint8_t regs[] = {0x0e, 0x10, 0x14, 0x15, 0x1b, 0x1d};
++	uint8_t *raw = (uint8_t *)s;
++	_Static_assert(sizeof(*s) == sizeof(regs), "PMIC byte snapshot layout");
++	for (unsigned int i = 0; i < sizeof(regs); i++)
++		if (io->pmic_read8(io->ctx, regs[i], &raw[i])) return T736_CPUCLOCK_PMIC;
++	return s->id == 3 && (s->enable & 0x0c) == 0x0c && !(s->phase & 0xc0) &&
++		(s->dcdc3 & 0x7f) == 40 && (s->dcdc4 & 0x7f) == 40 ?
++		0 : T736_CPUCLOCK_SUPPLY;
++}
++
++static int same_supply(const struct t736_cpuclock_supply *a,
++		       const struct t736_cpuclock_supply *b)
++{
++	const uint8_t *x = (const uint8_t *)a, *y = (const uint8_t *)b;
++	for (unsigned int i = 0; i < sizeof(*a); i++)
++		if (x[i] != y[i]) return 0;
++	return 1;
++}
++
++static void capture(const struct t736_cpuclock_io *io, struct t736_a55clock_d_report *r)
++{
++	r->base.final_ctrl = rd(io, T736_A55_CTRL);
++	r->base.final_stat = rd(io, T736_A55_STAT);
++	r->base.final_clk = rd(io, T736_A55_CLK);
++	r->base.slow_verified = r->base.final_clk == 0 && rd(io, 0x3034) == 0;
++}
++
++static int guards(const struct t736_cpuclock_io *io, struct t736_a55clock_d_report *r)
++{
++	for (unsigned int i = 0; i < T736_A55_GUARDS; i++)
++		if (rd(io, guard_offsets[i]) != r->base.guards_before[i]) r->base.guard_failure = 1;
++	for (unsigned int i = 0; i < 8; i++)
++		if ((io->read32(io->ctx, T736_A55_PPU(i)) & 0xf) != (i ? 0u : 8u))
++			r->base.guard_failure = 1;
++	if (io->read32(io->ctx, T736_CPUCLOCK_XO) != r->base.crystal) r->base.guard_failure = 1;
++	return r->base.guard_failure ? T736_CPUCLOCK_GUARD : 0;
++}
++
++static int program(const struct t736_cpuclock_io *io, struct t736_a55clock_d_report *r)
++{
++	uint32_t desired = T736_A55_ORIGINAL & ~LOCK;
++	int rc;
++	r->base.mutation_attempted = 1;
++	r->base.stage = 4;
++	rc = mux(io, r, 1, 0); if (rc) return rc;
++	rc = delay(io, 20); if (rc) return rc;
++	desired &= ~OUTPUT;
++	rc = stage(io, r, 2, desired, 0x1300, 0); if (rc) return rc;
++	desired &= ~LOCK_EN;
++	rc = stage(io, r, 3, desired, 0x1300, 0); if (rc) return rc;
++	desired = (desired & ~N_MASK) | 0x2700;
++	rc = stage(io, r, 4, desired, 0x1300, 1); if (rc) return rc;
++	desired |= LOCK_EN;
++	rc = stage(io, r, 5, desired, 0x1300, 1); if (rc) return rc;
++	r->base.stage = 5;
++	rc = commit(io, r, desired); if (rc) return rc;
++	rc = ready(io, r, 7, desired); if (rc) return rc;
++	desired |= OUTPUT;
++	rc = stage(io, r, 8, desired, 0x2700, 0); if (rc) return rc;
++	rc = ready(io, r, 9, desired); if (rc) return rc;
++	r->base.stage = 6;
++	rc = mux(io, r, 10, T736_A55_PLL_CLK); if (rc) return rc;
++	rc=delay(io,20);
++	return trace_step(io,r,11,T736_A55_CLK,T736_A55_PLL_CLK,T736_A55_PLL_CLK,rd(io,T736_A55_CLK),rc);
++}
++
++int t736_a55clock_d_prepare(const struct t736_cpuclock_io *io,
++			 struct t736_a55clock_d_report *r)
++{
++	int rc;
++	if (!io || !r || !io->read32 || !io->write32 || !io->delay_us || !io->pmic_read8)
++		return T736_CPUCLOCK_INVALID;
++	*r = (struct t736_a55clock_d_report){0};
++	r->base.stage = 1;
++	r->base.crystal = io->read32(io->ctx, T736_CPUCLOCK_XO);
++	r->base.before_ctrl = rd(io, T736_A55_CTRL);
++	r->base.before_stat = rd(io, T736_A55_STAT);
++	r->base.before_clk = rd(io, T736_A55_CLK);
++	for (unsigned int i = 0; i < 8; i++) r->base.ppu_before[i] = io->read32(io->ctx, T736_A55_PPU(i));
++	for (unsigned int i = 0; i < T736_A55_GUARDS; i++) r->base.guards_before[i] = rd(io, guard_offsets[i]);
++	capture(io, r);
++	if (((io->midr >> 4) & 0xfff) != 0xd05 || (io->mpidr & 0x00ffffff) ||
++	    (r->base.crystal & (BIT(14) | BIT(15))) != BIT(15) ||
++	    r->base.before_ctrl != T736_A55_ORIGINAL || r->base.before_stat != T736_A55_ORIGINAL ||
++	    r->base.before_clk != T736_A55_PLL_CLK || rd(io, 0x3034) || rd(io, 0x1004) ||
++	    rd(io, 0x1008) != 0x30000000 || rd(io, 0x1018) != 0x40000001 ||
++	    rd(io, 0x2000) != T736_CPUCLOCK_TARGET || rd(io, 0x202c) != T736_CPUCLOCK_TARGET ||
++	    rd(io, 0x201c) != T736_CPUCLOCK_TARGET_CLK) {
++		r->base.error = T736_CPUCLOCK_PRECONDITION;
++		return r->base.error;
++	}
++	r->base.stage = 2;
++	rc = supply(io, &r->base.supply_before);
++	if (rc) { r->base.error = rc; return rc; }
++	r->base.stage = 3;
++	rc = guards(io, r);
++	if (!rc) rc = delay(io, 20);
++	if (!rc) rc = guards(io, r);
++	if (!rc) rc = program(io, r);
++	capture(io, r);
++	if (!rc && (r->base.final_ctrl != T736_A55_TARGET || r->base.final_stat != T736_A55_TARGET ||
++	    r->base.final_clk != T736_A55_PLL_CLK)) rc = T736_CPUCLOCK_VERIFY;
++	if (!rc) { r->base.stage = 7; rc = supply(io, &r->base.supply_after); }
++	if (!rc && !same_supply(&r->base.supply_before, &r->base.supply_after)) rc = T736_CPUCLOCK_SUPPLY;
++	if (guards(io, r)) rc = T736_CPUCLOCK_GUARD;
++	if (rc && !r->failure_recorded)
++		trace_step(io,r,80,T736_A55_CTRL,r->base.before_ctrl,T736_A55_TARGET,rd(io,T736_A55_CTRL),rc);
++	if (rc && r->base.mutation_attempted) {
++		/* Never write CTRL on failure. CPU0 is running from the A55 clock. */
++		r->base.rollback_error = mux(io, r, 90, 0);
++		if (delay(io, 20)) r->base.rollback_error = T736_CPUCLOCK_DELAY;
++		capture(io, r);
++		if (!r->base.slow_verified || !(r->base.final_ctrl & ENABLE) || !(r->base.final_stat & ENABLE))
++			r->base.rollback_error = T736_CPUCLOCK_VERIFY;
++	}
++	capture(io, r);
++	if (guards(io, r)) rc = T736_CPUCLOCK_GUARD;
++	r->base.error = rc;
++	if (!rc) r->base.stage = 8;
++	return rc;
++}
+diff --git a/board/t736/bringup/a55clock_d.h b/board/t736/bringup/a55clock_d.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..01b2a329ebd5a663d78b237916ea0b76393b07e7
+--- /dev/null
++++ b/board/t736/bringup/a55clock_d.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef T736_A55CLOCK_D_H
++#define T736_A55CLOCK_D_H
++#include "a55clock.h"
++#define T736_A55_D_TRACES 24
++struct t736_a55clock_d_trace {
++ uint32_t step, reg, before, desired, actual, ctrl, stat, clk;
++ int error;
++};
++struct t736_a55clock_d_report {
++ struct t736_a55clock_report base;
++ struct t736_a55clock_d_trace trace[T736_A55_D_TRACES], failed;
++ uint32_t trace_count, failure_recorded;
++};
++/* Independent D candidate. All A55 trace capture stays in memory until return.
++ * Only write-N and following LOCK_EN allow exactly original or requested N;
++ * the explicit UPDATE and final CTRL/STAT/gates remain exact.
++ */
++int t736_a55clock_d_prepare(const struct t736_cpuclock_io *io,
++                          struct t736_a55clock_d_report *report);
++#endif
+diff --git a/board/t736/bringup/board.c b/board/t736/bringup/board.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..9113c50948f4cc4ba85891f1e808484784a03eb2
+--- /dev/null
++++ b/board/t736/bringup/board.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* Independently authored from the T736 running FDT and memory evidence. */
++#include <config.h>
++#include <cpu_func.h>
++#include <init.h>
++#include <stdio.h>
++#include <linux/arm-smccc.h>
++#include <asm/global_data.h>
++#include <asm/armv8/mmu.h>
++
++DECLARE_GLOBAL_DATA_PTR;
++
++static struct mm_region t736_mem_map[] = {
++	{ .virt = 0, .phys = 0, .size = 0x40000000,
++	  .attrs = PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) |
++		   PTE_BLOCK_NON_SHARE | PTE_BLOCK_PXN | PTE_BLOCK_UXN },
++	{ .virt = 0x40000000, .phys = 0x40000000, .size = 0x08000000,
++	  .attrs = PTE_BLOCK_MEMTYPE(MT_NORMAL) | PTE_BLOCK_INNER_SHARE },
++	/* Leave the observed BL31 reservation unmapped. */
++	{ .virt = 0x49000000, .phys = 0x49000000, .size = 0x69800000,
++	  .attrs = PTE_BLOCK_MEMTYPE(MT_NORMAL) | PTE_BLOCK_INNER_SHARE },
++	/* Leave the observed secure DRAM reservation unmapped. */
++	{ .virt = 0xc0000000, .phys = 0xc0000000, .size = 0x3b800000,
++	  .attrs = PTE_BLOCK_MEMTYPE(MT_NORMAL) | PTE_BLOCK_INNER_SHARE },
++	{ .virt = 0x100000000ULL, .phys = 0x100000000ULL,
++	  .size = 0x140000000ULL,
++	  .attrs = PTE_BLOCK_MEMTYPE(MT_NORMAL) | PTE_BLOCK_INNER_SHARE },
++	{ 0 }
++};
++
++struct mm_region *mem_map = t736_mem_map;
++
++int dram_init(void)
++{
++	/* No destructive sizing probe across firmware-owned memory. */
++	gd->ram_size = 0x200000000ULL;
++	return 0;
++}
++
++int dram_init_banksize(void)
++{
++	gd->dram[0].start = 0x40000000;
++	gd->dram[0].size = gd->ram_size;
++	return 0;
++}
++
++phys_addr_t board_get_usable_ram_top(phys_size_t total_size)
++{
++	/* Keep relocation below all observed high firmware reservations. */
++	return 0xb0000000;
++}
++
++int board_init(void)
++{
++	return 0;
++}
++
++int t736_uboot_cpuclock_init(void);
++
++int board_early_init_r(void)
++{
++	/* Serial is ready; no secondary CPU has been released. */
++	return t736_uboot_cpuclock_init();
++}
++
++int checkboard(void)
++{
++	puts("Board: T736 source boot candidate; authorized vendor DDR library\n");
++	return 0;
++}
++
++void enable_caches(void)
++{
++	icache_enable();
++	dcache_enable();
++}
++
++void reset_cpu(void)
++{
++	struct arm_smccc_res res;
++
++	arm_smccc_smc(0x84000009, 0, 0, 0, 0, 0, 0, 0, &res);
++}
+diff --git a/board/t736/bringup/cpuclock.c b/board/t736/bringup/cpuclock.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..1ad432bb381bcd20c45d7eb3e52614a575881c79
+--- /dev/null
++++ b/board/t736/bringup/cpuclock.c
+@@ -0,0 +1,353 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Fixed board A76 sequence derived from the separately reviewed offline-core
++ * trial. A733 CPU PLL manual: N raw (no +1), VCO 650..2260MHz; Tina's 26MHz
++ * A76 1014MHz OPP is 800mV for every listed VF bin. No donor probe is called.
++ */
++#include "cpuclock.h"
++
++#define BIT(n) (UINT32_C(1) << (n))
++#define UPDATE BIT(26)
++#define OUTPUT BIT(27)
++#define LOCK BIT(28)
++#define LOCK_EN BIT(29)
++#define LDO BIT(30)
++#define ENABLE BIT(31)
++#define N_MASK UINT32_C(0xff00)
++
++static const uint16_t guard_offsets[T736_CPUCLOCK_GUARDS] = {
++	0x0000, 0x0008, 0x000c,
++	0x1000, 0x1004, 0x1008, 0x1018, 0x101c, 0x102c,
++	0x3000, 0x3004, 0x3008, 0x3018, 0x301c, 0x302c,
++	0x3034, 0x2004, 0x2008, 0x2018,
++};
++
++static uint32_t read_reg(const struct t736_cpuclock_io *io, uint32_t off)
++{
++	return io->read32(io->ctx, T736_CPUCLOCK_BASE + off);
++}
++
++static int delay(const struct t736_cpuclock_io *io, uint32_t us)
++{
++	return io->delay_us(io->ctx, us) ? T736_CPUCLOCK_DELAY : 0;
++}
++
++static int write_checked(const struct t736_cpuclock_io *io, uint32_t off,
++			 uint32_t value)
++{
++	uint32_t before = 0, actual, ignore = 0;
++	if (off != T736_CPUCLOCK_CTRL && off != T736_CPUCLOCK_CLK)
++		return T736_CPUCLOCK_INVALID;
++	if (off == T736_CPUCLOCK_CTRL) {
++		value &= ~LOCK;
++		before = read_reg(io, off);
++		/* Gates are immediate. N is buffered, but hardware can latch it
++		 * when ENABLE or LOCK_EN rises. Accept only the known old N or,
++		 * at those two stages, the requested N. UPDATE stays strict. */
++		ignore = LOCK | N_MASK;
++	}
++	io->write32(io->ctx, T736_CPUCLOCK_BASE + off, value);
++	actual = read_reg(io, off);
++	if ((actual ^ value) & ~ignore)
++		return T736_CPUCLOCK_VERIFY;
++	if (off == T736_CPUCLOCK_CTRL && (actual & N_MASK) != (before & N_MASK) &&
++	    !((value & ENABLE) && ((~before & value) & (ENABLE | LOCK_EN)) &&
++	      (actual & N_MASK) == (value & N_MASK)))
++		return T736_CPUCLOCK_VERIFY;
++	return 0;
++}
++
++static int update(const struct t736_cpuclock_io *io, uint32_t desired)
++{
++	uint32_t active = ENABLE | OUTPUT | LOCK_EN | LDO;
++	if ((read_reg(io, T736_CPUCLOCK_CTRL) & UPDATE) ||
++	    (desired & active) != active)
++		return T736_CPUCLOCK_PRECONDITION;
++	/* UPDATE depends on running PLL clocks; never issue it while disabled.
++	 * Carry the software N through commit, rather than re-reading old N.
++	 * The manual requires at least 1us between UPDATE operations. */
++	if (delay(io, 1))
++		return T736_CPUCLOCK_DELAY;
++	io->write32(io->ctx, T736_CPUCLOCK_BASE + T736_CPUCLOCK_CTRL,
++		    (desired & ~LOCK) | UPDATE);
++	for (unsigned int i = 0; i < 1000; i++) {
++		uint32_t value = read_reg(io, T736_CPUCLOCK_CTRL);
++		if (!(value & UPDATE))
++			return ((value ^ desired) & ~(LOCK | UPDATE)) ?
++				T736_CPUCLOCK_VERIFY : 0;
++		if (delay(io, 10))
++			return T736_CPUCLOCK_DELAY;
++	}
++	return T736_CPUCLOCK_TIMEOUT;
++}
++
++static int stopped_valid(uint32_t ctrl, uint32_t stat)
++{
++	uint32_t n = ctrl & N_MASK;
++	return ctrl == stat &&
++		(ctrl & ~N_MASK) == (T736_CPUCLOCK_ORIGINAL & ~N_MASK) &&
++		(n == (T736_CPUCLOCK_ORIGINAL & N_MASK) ||
++		 n == (T736_CPUCLOCK_TARGET & N_MASK));
++}
++
++static int wait_lock(const struct t736_cpuclock_io *io)
++{
++	unsigned int consecutive = 0;
++	for (unsigned int i = 0; i < 7000; i++) {
++		uint32_t value = read_reg(io, T736_CPUCLOCK_CTRL);
++		uint32_t status = read_reg(io, T736_CPUCLOCK_STAT);
++		consecutive = ((value & LOCK) && (status & LOCK) &&
++			       !(value & UPDATE)) ? consecutive + 1 : 0;
++		if (consecutive == 3)
++			return 0;
++		if (delay(io, 10))
++			return T736_CPUCLOCK_DELAY;
++	}
++	return T736_CPUCLOCK_TIMEOUT;
++}
++
++static int read_supply(const struct t736_cpuclock_io *io,
++		       struct t736_cpuclock_supply *s)
++{
++	static const uint8_t regs[] = {0x0e, 0x10, 0x14, 0x15, 0x1b, 0x1d};
++	uint8_t *raw = (uint8_t *)s;
++	_Static_assert(sizeof(*s) == sizeof(regs), "PMIC byte snapshot layout");
++	for (unsigned int i = 0; i < sizeof(regs); i++)
++		if (io->pmic_read8(io->ctx, regs[i], &raw[i]))
++			return T736_CPUCLOCK_PMIC;
++	/* Selectors 30..60 are 800..1100mV; bit7 is preserved DVM state. */
++	if (s->id != 3 || (s->enable & 0x0c) != 0x0c || (s->phase & 0xc0) ||
++	    (s->dcdc3 & 0x7f) < 30 || (s->dcdc3 & 0x7f) > 60 ||
++	    (s->dcdc4 & 0x7f) < 30 || (s->dcdc4 & 0x7f) > 60)
++		return T736_CPUCLOCK_SUPPLY;
++	return 0;
++}
++
++static int same_supply(const struct t736_cpuclock_supply *a,
++		       const struct t736_cpuclock_supply *b)
++{
++	const uint8_t *x = (const uint8_t *)a, *y = (const uint8_t *)b;
++	for (unsigned int i = 0; i < sizeof(*a); i++)
++		if (x[i] != y[i])
++			return 0;
++	return 1;
++}
++
++static void capture_final(const struct t736_cpuclock_io *io,
++			  struct t736_cpuclock_report *r)
++{
++	r->final_ctrl = read_reg(io, T736_CPUCLOCK_CTRL);
++	r->final_stat = read_reg(io, T736_CPUCLOCK_STAT);
++	r->final_clk = read_reg(io, T736_CPUCLOCK_CLK);
++	r->slow_verified = r->final_clk == 0 && read_reg(io, 0x3034) == 0;
++}
++
++static int guard_check(const struct t736_cpuclock_io *io,
++		       struct t736_cpuclock_report *r)
++{
++	for (unsigned int i = 0; i < T736_CPUCLOCK_GUARDS; i++)
++		if (read_reg(io, guard_offsets[i]) != r->guards_before[i])
++			r->guard_failure = 1;
++	if (io->read32(io->ctx, T736_CPUCLOCK_XO) != r->crystal ||
++	    (io->read32(io->ctx, T736_CPUCLOCK_PPU6) & 0xf) != 0 ||
++	    (io->read32(io->ctx, T736_CPUCLOCK_PPU7) & 0xf) != 0)
++		r->guard_failure = 1;
++	return r->guard_failure ? T736_CPUCLOCK_GUARD : 0;
++}
++
++static int restore_slow(const struct t736_cpuclock_io *io,
++			struct t736_cpuclock_report *r)
++{
++	int first = 0, rc;
++	uint32_t desired;
++	r->rollback_attempted = 1;
++	if ((io->read32(io->ctx, T736_CPUCLOCK_PPU6) & 0xf) ||
++	    (io->read32(io->ctx, T736_CPUCLOCK_PPU7) & 0xf))
++		return T736_CPUCLOCK_PRECONDITION;
++	/* No PLL disable is allowed until slow mux is read back. */
++	rc = write_checked(io, T736_CPUCLOCK_CLK, 0);
++	if (rc)
++		return rc;
++	rc = delay(io, 20);
++	if (rc) first = rc;
++	desired = read_reg(io, T736_CPUCLOCK_CTRL) & ~(LOCK | UPDATE | OUTPUT);
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) first = rc;
++	desired &= ~LOCK_EN;
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) first = rc;
++	desired &= ~ENABLE;
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) first = rc;
++	/* Once stopped, N cannot be committed. Retain actual N20 or N39; never
++	 * enable an out-of-range N20 VCO just to restore a cosmetic register. */
++	for (unsigned int i = 0; i < 1000; i++) {
++		capture_final(io, r);
++		if (r->slow_verified && stopped_valid(r->final_ctrl, r->final_stat))
++			return first;
++		if (delay(io, 10))
++			return T736_CPUCLOCK_DELAY;
++	}
++	return T736_CPUCLOCK_VERIFY;
++}
++
++static int program_1014(const struct t736_cpuclock_io *io,
++			struct t736_cpuclock_report *r)
++{
++	int rc;
++	uint32_t desired = T736_CPUCLOCK_ORIGINAL | LDO;
++	r->stage = 4;
++	r->mutation_attempted = 1;
++	rc = write_checked(io, T736_CPUCLOCK_CLK, 0);
++	if (rc) return rc;
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) return rc;
++	rc = delay(io, 20);
++	if (rc) return rc;
++	/* Manual enable order: LDO, OUTPUT, factors, ENABLE, LOCK_ENABLE,
++	 * UPDATE, three lock observations, then 20us. CPU stays on slow. */
++	desired |= OUTPUT;
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) return rc;
++	desired = (desired & ~N_MASK) | (T736_CPUCLOCK_TARGET & N_MASK);
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) return rc;
++	desired |= ENABLE;
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) return rc;
++	desired |= LOCK_EN;
++	rc = write_checked(io, T736_CPUCLOCK_CTRL, desired);
++	if (rc) return rc;
++	rc = update(io, desired);
++	if (rc) return rc;
++	r->stage = 5;
++	rc = wait_lock(io);
++	if (rc) return rc;
++	rc = delay(io, 20);
++	if (rc) return rc;
++	if (read_reg(io, T736_CPUCLOCK_CTRL) != T736_CPUCLOCK_TARGET ||
++	    read_reg(io, T736_CPUCLOCK_STAT) != T736_CPUCLOCK_TARGET)
++		return T736_CPUCLOCK_VERIFY;
++	r->stage = 6;
++	rc = write_checked(io, T736_CPUCLOCK_CLK, T736_CPUCLOCK_TARGET_CLK);
++	if (rc) return rc;
++	return delay(io, 20);
++}
++
++int t736_cpuclock_prepare(const struct t736_cpuclock_io *io,
++			  struct t736_cpuclock_report *r)
++{
++	int rc;
++	if (!io || !r || !io->read32 || !io->write32 || !io->delay_us ||
++	    !io->pmic_read8)
++		return T736_CPUCLOCK_INVALID;
++	*r = (struct t736_cpuclock_report){0};
++	r->stage = 1;
++	r->midr = io->midr;
++	r->mpidr = io->mpidr;
++	r->crystal = io->read32(io->ctx, T736_CPUCLOCK_XO);
++	r->ppu6 = io->read32(io->ctx, T736_CPUCLOCK_PPU6);
++	r->ppu7 = io->read32(io->ctx, T736_CPUCLOCK_PPU7);
++	r->before_ctrl = read_reg(io, T736_CPUCLOCK_CTRL);
++	r->before_stat = read_reg(io, T736_CPUCLOCK_STAT);
++	r->before_clk = read_reg(io, T736_CPUCLOCK_CLK);
++	for (unsigned int i = 0; i < T736_CPUCLOCK_GUARDS; i++)
++		r->guards_before[i] = read_reg(io, guard_offsets[i]);
++	capture_final(io, r);
++	/* NCAT3 uses Aff1 for core index; bootstrap must be a little core. */
++	if (((io->midr >> 4) & 0xfff) != 0xd05 || (io->mpidr & 0xff) ||
++	    ((io->mpidr >> 8) & 0xff) >= 6 || (r->ppu6 & 0xf) || (r->ppu7 & 0xf) ||
++	    (r->crystal & (BIT(14) | BIT(15))) != BIT(15) ||
++	    r->before_ctrl != T736_CPUCLOCK_ORIGINAL ||
++	    r->before_stat != T736_CPUCLOCK_ORIGINAL || r->before_clk != 0 ||
++	    read_reg(io, 0x3034) != 0 || read_reg(io, 0x2004) != 0 ||
++	    read_reg(io, 0x2008) != UINT32_C(0x30000000) ||
++	    read_reg(io, 0x2018) != UINT32_C(0x40000001)) {
++		r->error = T736_CPUCLOCK_PRECONDITION;
++		return r->error;
++	}
++	r->stage = 2;
++	rc = read_supply(io, &r->supply_before);
++	if (rc) {
++		r->error = rc;
++		return rc;
++	}
++	r->stage = 3;
++	rc = guard_check(io, r);
++	if (!rc)
++		rc = program_1014(io, r);
++	if (!rc) {
++		r->stage = 7;
++		capture_final(io, r);
++		if (r->final_ctrl != T736_CPUCLOCK_TARGET ||
++		    r->final_stat != T736_CPUCLOCK_TARGET ||
++		    r->final_clk != T736_CPUCLOCK_TARGET_CLK)
++			rc = T736_CPUCLOCK_VERIFY;
++	}
++	if (!rc)
++		rc = read_supply(io, &r->supply_after);
++	if (!rc && !same_supply(&r->supply_before, &r->supply_after))
++		rc = T736_CPUCLOCK_SUPPLY;
++	if (guard_check(io, r))
++		rc = T736_CPUCLOCK_GUARD;
++	if (rc && r->mutation_attempted)
++		r->rollback_error = restore_slow(io, r);
++	capture_final(io, r);
++	if (guard_check(io, r))
++		rc = T736_CPUCLOCK_GUARD;
++	r->error = rc;
++	if (!rc)
++		r->stage = 8;
++	return rc;
++}
++
++#ifdef T736_CPUCLOCK
++#include "platform.h"
++extern int printf(const char *, ...);
++static uint32_t boot_read(void *ctx, uint32_t address)
++{
++	(void)ctx;
++	return t736_read32(address);
++}
++static void boot_write(void *ctx, uint32_t address, uint32_t value)
++{
++	(void)ctx;
++	t736_write32(address, value);
++}
++static int boot_delay(void *ctx, uint32_t us)
++{
++	(void)ctx;
++	return t736_delay_us(us);
++}
++int t736_cpuclock_boot(int (*pmic_read8)(void *, uint8_t, uint8_t *), void *ctx)
++{
++	struct t736_cpuclock_report r;
++	struct t736_cpuclock_io io = {ctx, boot_read, boot_write, boot_delay,
++		pmic_read8, 0, 0};
++	int rc;
++	__asm__ volatile("mrc p15,0,%0,c0,c0,0" : "=r"(io.midr));
++	__asm__ volatile("mrc p15,0,%0,c0,c0,5" : "=r"(io.mpidr));
++	rc = t736_cpuclock_prepare(&io, &r);
++	printf("CPU5 %d/%u core=%x/%x xo=%x ppu=%x/%x\n",
++	       rc, r.stage, r.midr, r.mpidr, r.crystal, r.ppu6, r.ppu7);
++	printf("B %x/%x/%x>%x/%x/%x m=%u r=%u/%d s=%u g=%u\n",
++	       r.before_ctrl, r.before_stat, r.before_clk, r.final_ctrl, r.final_stat,
++	       r.final_clk, r.mutation_attempted, r.rollback_attempted,
++	       r.rollback_error, r.slow_verified, r.guard_failure);
++	printf("PM %x/%x/%x/%x/%x/%x>%x/%x/%x/%x/%x/%x\n",
++	       r.supply_before.id, r.supply_before.enable, r.supply_before.dcdc3,
++	       r.supply_before.dcdc4, r.supply_before.phase, r.supply_before.feedback,
++	       r.supply_after.id, r.supply_after.enable, r.supply_after.dcdc3,
++	       r.supply_after.dcdc4, r.supply_after.phase, r.supply_after.feedback);
++	if (!rc) {
++		printf("CPU5 A76=1014MHz(N39/1), guards OK\n");
++		return 0;
++	}
++	if (r.slow_verified && stopped_valid(r.final_ctrl, r.final_stat) &&
++	    !r.rollback_error && !r.guard_failure) {
++		printf("CPU5 FAIL slow/PLL-off; N retained\n");
++		return 1;
++	}
++	printf("CPU5 UNSAFE halt/reset\n");
++	return -1;
++}
++#endif
+diff --git a/board/t736/bringup/cpuclock.h b/board/t736/bringup/cpuclock.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..337a93dbbc7dabe41617f14b06500d6ce81a0610
+--- /dev/null
++++ b/board/t736/bringup/cpuclock.h
+@@ -0,0 +1,73 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef T736_CPUCLOCK_H
++#define T736_CPUCLOCK_H
++#include <linux/types.h>
++#ifndef UINT32_C
++#define UINT32_C(x) x##U
++#endif
++
++#define T736_CPUCLOCK_BASE UINT32_C(0x08870000)
++#define T736_CPUCLOCK_XO UINT32_C(0x07090160)
++/* TF-A NCAT3 PPU_PWSR(core + 1), R_CPUCFG_BASE=0x07050000. */
++#define T736_CPUCLOCK_PPU6 UINT32_C(0x07058008)
++#define T736_CPUCLOCK_PPU7 UINT32_C(0x07059008)
++#define T736_CPUCLOCK_CTRL UINT32_C(0x2000)
++#define T736_CPUCLOCK_CLK UINT32_C(0x201c)
++#define T736_CPUCLOCK_STAT UINT32_C(0x202c)
++#define T736_CPUCLOCK_ORIGINAL UINT32_C(0x40801400)
++#define T736_CPUCLOCK_TARGET UINT32_C(0xf8802700)
++#define T736_CPUCLOCK_TARGET_CLK UINT32_C(0x03000000)
++#define T736_CPUCLOCK_GUARDS 19
++
++struct t736_cpuclock_io {
++	void *ctx;
++	uint32_t (*read32)(void *, uint32_t address);
++	void (*write32)(void *, uint32_t address, uint32_t value);
++	int (*delay_us)(void *, uint32_t usec);
++	/* Uses the caller's already initialized PMIC owner; no write callback. */
++	int (*pmic_read8)(void *, uint8_t reg, uint8_t *value);
++	uint32_t midr, mpidr;
++};
++
++struct t736_cpuclock_supply {
++	uint8_t id, enable, dcdc3, dcdc4, phase, feedback;
++};
++
++struct t736_cpuclock_report {
++	uint32_t stage, midr, mpidr, crystal, ppu6, ppu7;
++	uint32_t before_ctrl, before_stat, before_clk;
++	uint32_t final_ctrl, final_stat, final_clk;
++	uint32_t guards_before[T736_CPUCLOCK_GUARDS];
++	struct t736_cpuclock_supply supply_before, supply_after;
++	uint32_t mutation_attempted, rollback_attempted, slow_verified;
++	uint32_t guard_failure;
++	int error, rollback_error;
++};
++
++enum t736_cpuclock_error {
++	T736_CPUCLOCK_OK = 0,
++	T736_CPUCLOCK_INVALID = -1,
++	T736_CPUCLOCK_PRECONDITION = -2,
++	T736_CPUCLOCK_PMIC = -3,
++	T736_CPUCLOCK_SUPPLY = -4,
++	T736_CPUCLOCK_VERIFY = -5,
++	T736_CPUCLOCK_TIMEOUT = -6,
++	T736_CPUCLOCK_DELAY = -7,
++	T736_CPUCLOCK_GUARD = -8,
++};
++
++/* Candidate fixed-board initialization: 26MHz * N39 /1 = 1014MHz, A76 only.
++ * Caller is the A55 bootstrap core before releasing either A76 secondary.
++ * Reject unexpected initial state without writing. Only B CTRL/CLK may be
++ * written. Every wait is bounded; errors after mutation attempt restore the
++ * slow/disabled state, retaining committed N20/N39 (N cannot update while
++ * disabled). The caller must halt if restoration or a
++ * guard fails, rather than releasing secondaries under an unknown clock.
++ * Setpoints are read from PMIC; this is not an ADC/frequency measurement.
++ */
++int t736_cpuclock_prepare(const struct t736_cpuclock_io *io,
++			  struct t736_cpuclock_report *report);
++/* Production glue is compiled only with T736_CPUCLOCK; 0=target, 1=safe
++ * slow/PLL-off state retained, negative=unsafe state and caller must halt. */
++int t736_cpuclock_boot(int (*pmic_read8)(void *, uint8_t, uint8_t *), void *ctx);
++#endif
+diff --git a/board/t736/bringup/cpuclock_c.c b/board/t736/bringup/cpuclock_c.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..95b41725b7f91d929384e434052369f06e3e599a
+--- /dev/null
++++ b/board/t736/bringup/cpuclock_c.c
+@@ -0,0 +1,317 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Fixed board A76 sequence derived from the separately reviewed offline-core
++ * trial. A733 CPU PLL manual: N raw (no +1), VCO 650..2260MHz; Tina's 26MHz
++ * A76 1014MHz OPP is 800mV for every listed VF bin. No donor probe is called.
++ */
++#include "cpuclock_c.h"
++
++#define BIT(n) (UINT32_C(1) << (n))
++#define UPDATE BIT(26)
++#define OUTPUT BIT(27)
++#define LOCK BIT(28)
++#define LOCK_EN BIT(29)
++#define LDO BIT(30)
++#define ENABLE BIT(31)
++#define N_MASK UINT32_C(0xff00)
++
++static const uint16_t guard_offsets[T736_CPUCLOCK_GUARDS] = {
++	0x0000, 0x0008, 0x000c,
++	0x1000, 0x1004, 0x1008, 0x1018, 0x101c, 0x102c,
++	0x3000, 0x3004, 0x3008, 0x3018, 0x301c, 0x302c,
++	0x3034, 0x2004, 0x2008, 0x2018,
++};
++
++static uint32_t read_reg(const struct t736_cpuclock_io *io, uint32_t off)
++{
++	return io->read32(io->ctx, T736_CPUCLOCK_BASE + off);
++}
++
++static int delay(const struct t736_cpuclock_io *io, uint32_t us)
++{
++	return io->delay_us(io->ctx, us) ? T736_CPUCLOCK_DELAY : 0;
++}
++
++static int trace_step(const struct t736_cpuclock_io *io,
++                      struct t736_cpuclock_c_report *r, uint32_t step,
++                      uint32_t off, uint32_t before, uint32_t desired,
++                      uint32_t actual, int error)
++{
++ struct t736_cpuclock_c_trace t = {step, off, before, desired, actual,
++  read_reg(io, T736_CPUCLOCK_CTRL), read_reg(io, T736_CPUCLOCK_STAT),
++  read_reg(io, T736_CPUCLOCK_CLK), error};
++ r->last = t; r->trace_count++;
++ if (error && !r->failure_recorded) {r->failed = t; r->failure_recorded = 1;}
++ if (r->trace) r->trace(io->ctx, &t);
++ return error;
++}
++static int write_mux(const struct t736_cpuclock_io *io,
++                     struct t736_cpuclock_c_report *r, uint32_t step, uint32_t value)
++{
++ uint32_t before=read_reg(io,T736_CPUCLOCK_CLK), actual;
++ io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_CPUCLOCK_CLK,value);
++ actual=read_reg(io,T736_CPUCLOCK_CLK);
++ return trace_step(io,r,step,T736_CPUCLOCK_CLK,before,value,actual,
++                   actual==value?0:T736_CPUCLOCK_VERIFY);
++}
++/* The cold ENABLE/LOCK_EN and warm LOCK_EN stages accept only the original
++ * committed N or the requested N. Match runtime-v4, without suppressing any
++ * gate checks or accepting any third N. Capture before rollback overwrites it.
++ */
++static int stage_control(const struct t736_cpuclock_io *io,
++                         struct t736_cpuclock_c_report *r, uint32_t step,
++                         uint32_t desired, uint32_t old_n, int may_latch)
++{
++ uint32_t before=read_reg(io,T736_CPUCLOCK_CTRL), actual;
++ int rc=0;
++ if (desired & (LOCK|UPDATE)) return T736_CPUCLOCK_INVALID;
++ io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_CPUCLOCK_CTRL,desired);
++ actual=read_reg(io,T736_CPUCLOCK_CTRL);
++ if (((actual^desired)&~(LOCK|N_MASK)) ||
++     ((actual&N_MASK)!=old_n &&
++      !(may_latch && (desired&ENABLE) && (actual&N_MASK)==(desired&N_MASK))))
++  rc=T736_CPUCLOCK_VERIFY;
++ return trace_step(io,r,step,T736_CPUCLOCK_CTRL,before,desired,actual,rc);
++}
++static int update(const struct t736_cpuclock_io *io,
++                  struct t736_cpuclock_c_report *r, uint32_t step, uint32_t desired)
++{
++ uint32_t before=read_reg(io,T736_CPUCLOCK_CTRL),actual=before;
++ int rc=T736_CPUCLOCK_TIMEOUT;
++ if ((desired&(ENABLE|LDO|LOCK_EN))!=(ENABLE|LDO|LOCK_EN) ||
++     (desired&(LOCK|UPDATE)) ||
++     ((desired&N_MASK)!=0x2000 && (desired&N_MASK)!=0x2700) || (before&UPDATE))
++  return trace_step(io,r,step,T736_CPUCLOCK_CTRL,before,desired,actual,T736_CPUCLOCK_PRECONDITION);
++ if(delay(io,1)) return trace_step(io,r,step,T736_CPUCLOCK_CTRL,before,desired,actual,T736_CPUCLOCK_DELAY);
++ io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_CPUCLOCK_CTRL,desired|UPDATE);
++ for(unsigned int i=0;i<1000;i++) {
++  actual=read_reg(io,T736_CPUCLOCK_CTRL);
++  if(!(actual&UPDATE)) {
++   rc=((actual^desired)&~LOCK) || ((read_reg(io,T736_CPUCLOCK_STAT)^desired)&~LOCK)
++      ?T736_CPUCLOCK_VERIFY:0;
++   break;
++  }
++  if(delay(io,10)){rc=T736_CPUCLOCK_DELAY;break;}
++ }
++ return trace_step(io,r,step,T736_CPUCLOCK_CTRL,before,desired|UPDATE,actual,rc);
++}
++
++static int stopped_valid(uint32_t ctrl, uint32_t stat)
++{
++	uint32_t n = ctrl & N_MASK;
++	return ctrl == stat &&
++		(ctrl & ~N_MASK) == (T736_CPUCLOCK_ORIGINAL & ~N_MASK) &&
++		(n == (T736_CPUCLOCK_ORIGINAL & N_MASK) ||
++		 n == UINT32_C(0x2000) ||
++		 n == (T736_CPUCLOCK_TARGET & N_MASK));
++}
++
++static int wait_ready(const struct t736_cpuclock_io *io,
++                      struct t736_cpuclock_c_report *r, uint32_t step, uint32_t desired)
++{
++ unsigned int consecutive=0;
++ uint32_t expected=desired|LOCK, before=read_reg(io,T736_CPUCLOCK_CTRL);
++ int rc=T736_CPUCLOCK_TIMEOUT;
++ for(unsigned int i=0;i<7000;i++) {
++  consecutive=read_reg(io,T736_CPUCLOCK_CTRL)==expected &&
++    read_reg(io,T736_CPUCLOCK_STAT)==expected ? consecutive+1:0;
++  if(consecutive==3) {
++   rc=delay(io,20);
++   if(!rc && (read_reg(io,T736_CPUCLOCK_CTRL)!=expected ||
++              read_reg(io,T736_CPUCLOCK_STAT)!=expected)) rc=T736_CPUCLOCK_VERIFY;
++   break;
++  }
++  if(delay(io,10)){rc=T736_CPUCLOCK_DELAY;break;}
++ }
++ return trace_step(io,r,step,T736_CPUCLOCK_CTRL,before,expected,
++                   read_reg(io,T736_CPUCLOCK_CTRL),rc);
++}
++
++static int read_supply(const struct t736_cpuclock_io *io,
++		       struct t736_cpuclock_supply *s)
++{
++	static const uint8_t regs[] = {0x0e, 0x10, 0x14, 0x15, 0x1b, 0x1d};
++	uint8_t *raw = (uint8_t *)s;
++	_Static_assert(sizeof(*s) == sizeof(regs), "PMIC byte snapshot layout");
++	for (unsigned int i = 0; i < sizeof(regs); i++)
++		if (io->pmic_read8(io->ctx, regs[i], &raw[i]))
++			return T736_CPUCLOCK_PMIC;
++	/* Selectors 30..60 are 800..1100mV; bit7 is preserved DVM state. */
++	if (s->id != 3 || (s->enable & 0x0c) != 0x0c || (s->phase & 0xc0) ||
++	    (s->dcdc3 & 0x7f) < 30 || (s->dcdc3 & 0x7f) > 60 ||
++	    (s->dcdc4 & 0x7f) < 30 || (s->dcdc4 & 0x7f) > 60)
++		return T736_CPUCLOCK_SUPPLY;
++	return 0;
++}
++
++static int same_supply(const struct t736_cpuclock_supply *a,
++		       const struct t736_cpuclock_supply *b)
++{
++	const uint8_t *x = (const uint8_t *)a, *y = (const uint8_t *)b;
++	for (unsigned int i = 0; i < sizeof(*a); i++)
++		if (x[i] != y[i])
++			return 0;
++	return 1;
++}
++
++static void capture_final(const struct t736_cpuclock_io *io,
++			  struct t736_cpuclock_c_report *r)
++{
++	r->base.final_ctrl = read_reg(io, T736_CPUCLOCK_CTRL);
++	r->base.final_stat = read_reg(io, T736_CPUCLOCK_STAT);
++	r->base.final_clk = read_reg(io, T736_CPUCLOCK_CLK);
++	r->base.slow_verified = r->base.final_clk == 0 && read_reg(io, 0x3034) == 0;
++}
++
++static int guard_check(const struct t736_cpuclock_io *io,
++		       struct t736_cpuclock_c_report *r)
++{
++	for (unsigned int i = 0; i < T736_CPUCLOCK_GUARDS; i++)
++		if (read_reg(io, guard_offsets[i]) != r->base.guards_before[i])
++			r->base.guard_failure = 1;
++	if (io->read32(io->ctx, T736_CPUCLOCK_XO) != r->base.crystal ||
++	    (io->read32(io->ctx, T736_CPUCLOCK_PPU6) & 0xf) != 0 ||
++	    (io->read32(io->ctx, T736_CPUCLOCK_PPU7) & 0xf) != 0)
++		r->base.guard_failure = 1;
++	return r->base.guard_failure ? T736_CPUCLOCK_GUARD : 0;
++}
++
++static int restore_slow(const struct t736_cpuclock_io *io,
++                        struct t736_cpuclock_c_report *r)
++{
++ uint32_t value,before,actual;
++ int rc;
++ r->base.rollback_attempted=1;
++ if((io->read32(io->ctx,T736_CPUCLOCK_PPU6)&0xf) ||
++    (io->read32(io->ctx,T736_CPUCLOCK_PPU7)&0xf)) return T736_CPUCLOCK_PRECONDITION;
++ rc=write_mux(io,r,90,0);if(rc)return rc;
++ if(delay(io,20))return T736_CPUCLOCK_DELAY;
++ const uint32_t clear[]={OUTPUT,LOCK_EN,ENABLE};
++ for(unsigned int i=0;i<3;i++) {
++  before=read_reg(io,T736_CPUCLOCK_CTRL);
++  value=before&~(LOCK|UPDATE|clear[i]);
++  io->write32(io->ctx,T736_CPUCLOCK_BASE+T736_CPUCLOCK_CTRL,value);
++  actual=read_reg(io,T736_CPUCLOCK_CTRL);
++  trace_step(io,r,91+i,T736_CPUCLOCK_CTRL,before,value,actual,0);
++ }
++ /* No UPDATE in rollback; retain N20/N32/N39 exactly as runtime-v4. */
++ for(unsigned int i=0;i<1000;i++) {
++  capture_final(io,r);
++  if(r->base.slow_verified && stopped_valid(r->base.final_ctrl,r->base.final_stat))return 0;
++  if(delay(io,10))return T736_CPUCLOCK_DELAY;
++ }
++ return T736_CPUCLOCK_VERIFY;
++}
++static int program_1014(const struct t736_cpuclock_io *io,
++                        struct t736_cpuclock_c_report *r)
++{
++ uint32_t desired=T736_CPUCLOCK_ORIGINAL;
++ int rc;
++ r->base.stage=4;r->base.mutation_attempted=1;
++ /* Cold416: exactly the board-tested runtime-v4 order and external /2. */
++ rc=write_mux(io,r,1,0x00010000);if(rc)return rc;
++ rc=stage_control(io,r,2,desired|LDO,0x1400,0);if(rc)return rc;
++ desired|=OUTPUT;
++ rc=stage_control(io,r,3,desired,0x1400,0);if(rc)return rc;
++ desired=(desired&~N_MASK)|0x2000;
++ rc=stage_control(io,r,4,desired,0x1400,0);if(rc)return rc;
++ desired|=ENABLE;
++ rc=stage_control(io,r,5,desired,0x1400,1);if(rc)return rc;
++ desired|=LOCK_EN;
++ rc=stage_control(io,r,6,desired,0x1400,1);if(rc)return rc;
++ rc=update(io,r,7,desired);if(rc)return rc;
++ rc=wait_ready(io,r,8,desired);if(rc)return rc;
++ rc=write_mux(io,r,9,0x03010000);if(rc)return rc;
++ /* Warm1014: PLL EN/LDO stay on, output closed while factor changes. */
++ r->base.stage=5;
++ rc=write_mux(io,r,10,0);if(rc)return rc;
++ rc=delay(io,20);if(rc)return rc;
++ desired&=~OUTPUT;
++ rc=stage_control(io,r,11,desired,0x2000,0);if(rc)return rc;
++ desired&=~LOCK_EN;
++ rc=stage_control(io,r,12,desired,0x2000,0);if(rc)return rc;
++ desired=(desired&~N_MASK)|0x2700;
++ rc=stage_control(io,r,13,desired,0x2000,0);if(rc)return rc;
++ desired|=LOCK_EN;
++ rc=stage_control(io,r,14,desired,0x2000,1);if(rc)return rc;
++ rc=update(io,r,15,desired);if(rc)return rc;
++ rc=wait_ready(io,r,16,desired);if(rc)return rc;
++ desired|=OUTPUT;
++ rc=stage_control(io,r,17,desired,0x2700,0);if(rc)return rc;
++ rc=wait_ready(io,r,18,desired);if(rc)return rc;
++ r->base.stage=6;
++ rc=write_mux(io,r,19,T736_CPUCLOCK_TARGET_CLK);if(rc)return rc;
++ return delay(io,20);
++}
++
++int t736_cpuclock_c_prepare(const struct t736_cpuclock_io *io,
++			  struct t736_cpuclock_c_report *r, t736_cpuclock_c_trace_fn trace)
++{
++	int rc;
++	if (!io || !r || !io->read32 || !io->write32 || !io->delay_us ||
++	    !io->pmic_read8)
++		return T736_CPUCLOCK_INVALID;
++	*r = (struct t736_cpuclock_c_report){0};
++	r->trace = trace;
++	r->base.stage = 1;
++	r->base.midr = io->midr;
++	r->base.mpidr = io->mpidr;
++	r->base.crystal = io->read32(io->ctx, T736_CPUCLOCK_XO);
++	r->base.ppu6 = io->read32(io->ctx, T736_CPUCLOCK_PPU6);
++	r->base.ppu7 = io->read32(io->ctx, T736_CPUCLOCK_PPU7);
++	r->base.before_ctrl = read_reg(io, T736_CPUCLOCK_CTRL);
++	r->base.before_stat = read_reg(io, T736_CPUCLOCK_STAT);
++	r->base.before_clk = read_reg(io, T736_CPUCLOCK_CLK);
++	for (unsigned int i = 0; i < T736_CPUCLOCK_GUARDS; i++)
++		r->base.guards_before[i] = read_reg(io, guard_offsets[i]);
++	capture_final(io, r);
++	/* NCAT3 uses Aff1 for core index; bootstrap must be a little core. */
++	if (((io->midr >> 4) & 0xfff) != 0xd05 || (io->mpidr & 0xff) ||
++	    ((io->mpidr >> 8) & 0xff) >= 6 || (r->base.ppu6 & 0xf) || (r->base.ppu7 & 0xf) ||
++	    (r->base.crystal & (BIT(14) | BIT(15))) != BIT(15) ||
++	    r->base.before_ctrl != T736_CPUCLOCK_ORIGINAL ||
++	    r->base.before_stat != T736_CPUCLOCK_ORIGINAL || r->base.before_clk != 0 ||
++	    read_reg(io, 0x3034) != 0 || read_reg(io, 0x2004) != 0 ||
++	    read_reg(io, 0x2008) != UINT32_C(0x30000000) ||
++	    read_reg(io, 0x2018) != UINT32_C(0x40000001)) {
++		r->base.error = T736_CPUCLOCK_PRECONDITION;
++		return r->base.error;
++	}
++	r->base.stage = 2;
++	rc = read_supply(io, &r->base.supply_before);
++	if (rc) {
++		r->base.error = rc;
++		return rc;
++	}
++	r->base.stage = 3;
++	rc = guard_check(io, r);
++	if (!rc)
++		rc = program_1014(io, r);
++	if (!rc) {
++		r->base.stage = 7;
++		capture_final(io, r);
++		if (r->base.final_ctrl != T736_CPUCLOCK_TARGET ||
++		    r->base.final_stat != T736_CPUCLOCK_TARGET ||
++		    r->base.final_clk != T736_CPUCLOCK_TARGET_CLK)
++			rc = T736_CPUCLOCK_VERIFY;
++	}
++	if (!rc)
++		rc = read_supply(io, &r->base.supply_after);
++	if (!rc && !same_supply(&r->base.supply_before, &r->base.supply_after))
++		rc = T736_CPUCLOCK_SUPPLY;
++	if (guard_check(io, r))
++		rc = T736_CPUCLOCK_GUARD;
++	if (rc && r->base.mutation_attempted && !r->failure_recorded) {
++		uint32_t value = read_reg(io, T736_CPUCLOCK_CTRL);
++		trace_step(io, r, 80, T736_CPUCLOCK_CTRL, value, value, value, rc);
++	}
++	if (rc && r->base.mutation_attempted)
++		r->base.rollback_error = restore_slow(io, r);
++	capture_final(io, r);
++	if (guard_check(io, r))
++		rc = T736_CPUCLOCK_GUARD;
++	r->base.error = rc;
++	if (!rc)
++		r->base.stage = 8;
++	return rc;
++}
++
+diff --git a/board/t736/bringup/cpuclock_c.h b/board/t736/bringup/cpuclock_c.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..29d77a669f21c7f608706cc1f01094df770144f6
+--- /dev/null
++++ b/board/t736/bringup/cpuclock_c.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef T736_CPUCLOCK_C_H
++#define T736_CPUCLOCK_C_H
++#include "cpuclock.h"
++struct t736_cpuclock_c_trace {
++ uint32_t step, reg, before, desired, actual, ctrl, stat, clk;
++ int error;
++};
++typedef void (*t736_cpuclock_c_trace_fn)(void *, const struct t736_cpuclock_c_trace *);
++struct t736_cpuclock_c_report {
++ struct t736_cpuclock_report base;
++ struct t736_cpuclock_c_trace last, failed;
++ uint32_t failure_recorded, trace_count;
++ t736_cpuclock_c_trace_fn trace;
++};
++/* Exact two-part runtime-v4 path: cold N32/ext2 then warm N39/ext1.
++ * B1/B2 remain frozen. This new candidate requires independent cold boot.
++ * Callback only observes captured values; it must not write CPU or PMIC state.
++ */
++int t736_cpuclock_c_prepare(const struct t736_cpuclock_io *,
++ struct t736_cpuclock_c_report *, t736_cpuclock_c_trace_fn);
++#endif
+diff --git a/board/t736/bringup/t736-uboot-cpuclock-d.c b/board/t736/bringup/t736-uboot-cpuclock-d.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..7c5a4d390b9dad3848e7f695edfabf2aa6d21b60
+--- /dev/null
++++ b/board/t736/bringup/t736-uboot-cpuclock-d.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* C preserves B1/B2 as separately buildable artifacts. The included B1 glue
++ * owns the inherited TWI callbacks; this file adds no second bus owner. */
++#define t736_uboot_cpuclock_init t736_uboot_cpuclock_b1
++#include "t736-uboot-cpuclock.c"
++#undef t736_uboot_cpuclock_init
++#include "a55clock_d.h"
++#include "cpuclock_c.h"
++
++static void cpu_c_trace(void *ctx, const struct t736_cpuclock_c_trace *t)
++{
++ (void)ctx;
++ printf("CPU-D A76 step=%u reg=%04x before=%08x desired=%08x actual=%08x CTRL=%08x STAT=%08x CLK=%08x rc=%d\n",
++  t->step,t->reg,t->before,t->desired,t->actual,t->ctrl,t->stat,t->clk,t->error);
++}
++static int cpu_c_a76(void)
++{
++ struct t736_twi bus={NULL,twi_read,twi_write,counter_low,COUNTER_HZ/100U,POLL_LIMIT,0,0};
++ struct t736_cpuclock_io io={&bus,mmio_read,mmio_write,delay_checked,pmic_read,0,0};
++ struct t736_cpuclock_c_report r;
++ uint64_t midr,mpidr,frequency;
++ int rc;
++ asm volatile("mrs %0, midr_el1":"=r"(midr));
++ asm volatile("mrs %0, mpidr_el1":"=r"(mpidr));
++ asm volatile("mrs %0, cntfrq_el0":"=r"(frequency));
++ io.midr=(uint32_t)midr;io.mpidr=(uint32_t)mpidr;
++ if(frequency!=COUNTER_HZ || delay_checked(NULL,20)) {
++  puts("CPU-D: A76 timer invalid; unchanged\n");return 0;
++ }
++ rc=t736_cpuclock_c_prepare(&io,&r,cpu_c_trace);
++ printf("CPU-D: A76 rc=%d stage=%u CTRL=%08x STAT=%08x CLK=%08x mutation=%u rollback=%u/%d slow=%u guard=%u trace=%u\n",
++  rc,r.base.stage,r.base.final_ctrl,r.base.final_stat,r.base.final_clk,
++  r.base.mutation_attempted,r.base.rollback_attempted,r.base.rollback_error,
++  r.base.slow_verified,r.base.guard_failure,r.trace_count);
++ if(r.failure_recorded) {
++  puts("CPU-D first failing capture (before rollback):\n");cpu_c_trace(NULL,&r.failed);
++ }
++ printf("CPU-D: A76 PMIC %02x/%02x/%02x/%02x/%02x/%02x -> %02x/%02x/%02x/%02x/%02x/%02x\n",
++  r.base.supply_before.id,r.base.supply_before.enable,r.base.supply_before.dcdc3,
++  r.base.supply_before.dcdc4,r.base.supply_before.phase,r.base.supply_before.feedback,
++  r.base.supply_after.id,r.base.supply_after.enable,r.base.supply_after.dcdc3,
++  r.base.supply_after.dcdc4,r.base.supply_after.phase,r.base.supply_after.feedback);
++ if(!rc) {puts("CPU-D: A76 cold416 then warm1014 PASS\n");return 0;}
++ if(!r.base.mutation_attempted && !r.base.guard_failure) {
++  puts("CPU-D: A76 precondition rejected; unchanged\n");return 0;
++ }
++ uint32_t n=r.base.final_ctrl&0xff00U;
++ if(!r.base.rollback_error && !r.base.guard_failure && r.base.slow_verified &&
++    r.base.final_ctrl==r.base.final_stat &&
++    (r.base.final_ctrl&~0xff00U)==(T736_CPUCLOCK_ORIGINAL&~0xff00U) &&
++    (n==0x1400U || n==0x2000U || n==0x2700U)) {
++  puts("CPU-D: A76 safe slow/PLL-off; committed N retained\n");return 0;
++ }
++ puts("CPU-D: A76 unsafe restoration; halt before secondary release\n");return -EIO;
++}
++
++static void a55_mmio_write(void *ctx, uint32_t addr, uint32_t value)
++{
++	mmio_write(ctx, addr, value);
++	/* CPU0 itself switches clock source; synchronize subsequent execution. */
++	asm volatile("dsb sy; isb" ::: "memory");
++}
++
++int t736_uboot_cpuclock_init(void)
++{
++	struct t736_twi bus = {NULL, twi_read, twi_write, counter_low,
++		COUNTER_HZ / 100U, POLL_LIMIT, 0, 0};
++	struct t736_cpuclock_io io = {&bus, mmio_read, a55_mmio_write,
++		delay_checked, pmic_read, 0, 0};
++	struct t736_a55clock_d_report report;
++	struct t736_a55clock_report *r = &report.base;
++	uint64_t midr, mpidr, frequency, saved_daif, masked_daif;
++	int rc = cpu_c_a76();
++	if (rc) return rc;
++	asm volatile("mrs %0, midr_el1" : "=r"(midr));
++	asm volatile("mrs %0, mpidr_el1" : "=r"(mpidr));
++	asm volatile("mrs %0, cntfrq_el0" : "=r"(frequency));
++	io.midr = (uint32_t)midr;
++	io.mpidr = (uint32_t)mpidr;
++	if (frequency != COUNTER_HZ || delay_checked(NULL, 20)) {
++		puts("CPU-D: A55 timer invalid; unchanged\n");
++		return 0;
++	}
++	/* AArch64 U-Boot disable_interrupts() is a stub in this configuration.
++ * Save DAIF explicitly and mask IRQ/FIQ. CNT is independent of CPU PLL. */
++	asm volatile("mrs %0, daif; msr daifset, #3; isb; mrs %1, daif"
++		     : "=&r"(saved_daif), "=&r"(masked_daif) :: "memory");
++	if ((masked_daif & 0xc0U) != 0xc0U) {
++		asm volatile("msr daif, %0; isb" :: "r"(saved_daif) : "memory");
++		puts("CPU-D: interrupt mask failed; A55 unchanged\n");
++		return 0;
++	}
++	rc = t736_a55clock_d_prepare(&io, &report);
++	/* Serial output starts only after the complete A55 transaction returns. */
++	for (unsigned int i=0;i<report.trace_count;i++) {
++	 const struct t736_a55clock_d_trace *t=&report.trace[i];
++	 printf("CPU-D A55 step=%u reg=%04x before=%08x desired=%08x actual=%08x CTRL=%08x STAT=%08x CLK=%08x rc=%d\n",
++	  t->step,t->reg,t->before,t->desired,t->actual,t->ctrl,t->stat,t->clk,t->error);
++	}
++	/* Preserve the interrupt mask on any failed mutation until INITCALL
++ * halts. Never resume boot or release secondaries in that case. */
++	if (!rc || (!r->mutation_attempted && !r->guard_failure))
++		asm volatile("dsb sy; msr daif, %0; isb" :: "r"(saved_daif) : "memory");
++	printf("CPU-D: A55 rc=%d stage=%u core=%08x/%08x CNT=%llu DAIF=%llx/%llx\n",
++	       rc, r->stage, io.midr, io.mpidr, (unsigned long long)frequency,
++	       (unsigned long long)saved_daif, (unsigned long long)masked_daif);
++	printf("CPU-D: A55 %08x/%08x/%08x -> %08x/%08x/%08x mutation=%u rollback=%d slow=%u guard=%u\n",
++	       r->before_ctrl, r->before_stat, r->before_clk, r->final_ctrl, r->final_stat,
++	       r->final_clk, r->mutation_attempted, r->rollback_error, r->slow_verified, r->guard_failure);
++	printf("CPU-D: PMIC %02x/%02x/%02x/%02x/%02x/%02x -> %02x/%02x/%02x/%02x/%02x/%02x\n",
++	       r->supply_before.id, r->supply_before.enable, r->supply_before.dcdc3,
++	       r->supply_before.dcdc4, r->supply_before.phase, r->supply_before.feedback,
++	       r->supply_after.id, r->supply_after.enable, r->supply_after.dcdc3,
++	       r->supply_after.dcdc4, r->supply_after.phase, r->supply_after.feedback);
++	if (!rc) {
++		puts("CPU-D: A55/A76 configured N39/1=1014MHz; DSU and PMIC unchanged\n");
++		return 0;
++	}
++	if (!r->mutation_attempted && !r->guard_failure) {
++		puts("CPU-D: A55 precondition rejected; unchanged\n");
++		return 0;
++	}
++	puts("CPU-D: A55 mutation or guard failed; IRQ/FIQ masked, halt before secondary release\n");
++	return -EIO;
++}
+diff --git a/board/t736/bringup/t736-uboot-cpuclock.c b/board/t736/bringup/t736-uboot-cpuclock.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..50f6037c6037395aa57bcfdb9ee718387be221a5
+--- /dev/null
++++ b/board/t736/bringup/t736-uboot-cpuclock.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Fixed T736 board candidate: A76 only, before any secondary CPU release.
++ * Inherit the SPL's initialized S_TWI0 byte engine. No PMIC configuration
++ * writes, no bus initialization, and no A55/DSU clock writes are permitted.
++ */
++#include <stdio.h>
++#include <asm/io.h>
++#include <linux/errno.h>
++#include "cpuclock.h"
++#include "twi.h"
++
++#define TWI_BASE 0x07083000U
++#define POLL_LIMIT 1000000U
++#define COUNTER_HZ 24000000U
++
++static uint32_t counter_low(void *ctx)
++{
++	uint64_t ticks;
++	(void)ctx;
++	asm volatile("isb; mrs %0, cntpct_el0" : "=r"(ticks) :: "memory");
++	return (uint32_t)ticks;
++}
++
++static uint32_t mmio_read(void *ctx, uint32_t addr)
++{
++	(void)ctx;
++	return readl((void __iomem *)(uintptr_t)addr);
++}
++
++static void mmio_write(void *ctx, uint32_t addr, uint32_t value)
++{
++	(void)ctx;
++	writel(value, (void __iomem *)(uintptr_t)addr);
++	asm volatile("dsb sy" ::: "memory");
++}
++
++static int delay_checked(void *ctx, uint32_t us)
++{
++	uint32_t begin = counter_low(ctx);
++	if (us > 0x7fffffffU / 24U)
++		return -EINVAL;
++	for (unsigned int i = 0; i < POLL_LIMIT; i++)
++		if ((uint32_t)(counter_low(ctx) - begin) >= us * 24U)
++			return 0;
++	return -ETIMEDOUT;
++}
++
++static uint32_t twi_read(void *ctx, uint32_t off)
++{
++	return mmio_read(ctx, TWI_BASE + off);
++}
++
++static void twi_write(void *ctx, uint32_t off, uint32_t value)
++{
++	mmio_write(ctx, TWI_BASE + off, value);
++}
++
++/* All of these values come from the original SPL initialization. Refuse to
++ * assume ownership if TF-A or another stage has changed that configuration.
++ */
++static int inherited_twi_valid(void)
++{
++	return (mmio_read(NULL, 0x07010010) & 0x0700001fU) == 0x04000000U &&
++		(mmio_read(NULL, 0x0701019c) & 0x10001U) == 0x10001U &&
++		(mmio_read(NULL, 0x07025000) & 0xffU) == 0x22U &&
++		twi_read(NULL, TWI_CLOCK) == 0x59U &&
++		twi_read(NULL, TWI_EFR) == 0 &&
++		(twi_read(NULL, TWI_CTRL) & (TWI_EN | TWI_START | TWI_STOP)) == TWI_EN &&
++		(twi_read(NULL, TWI_STATUS) & 0xffU) == 0xf8U &&
++		(twi_read(NULL, TWI_LINE) & 0x30U) == 0x30U &&
++		!(twi_read(NULL, TWI_DRV_CTRL) & 0x80000001U) &&
++		!(twi_read(NULL, TWI_PMU_CTRL) & 0xffU);
++}
++
++static int pmic_read(void *ctx, uint8_t reg, uint8_t *value)
++{
++	struct t736_twi *bus = ctx;
++	int rc;
++	if (!inherited_twi_valid())
++		return -EBUSY;
++	rc = t736_twi_read8(bus, 0x36, reg, value);
++	if (rc || !inherited_twi_valid())
++		return -EIO;
++	/* Fixed-board candidate is limited to the measured 900mV selectors.
++ * Bit7 is DVM state, not part of the voltage selector. */
++	if ((reg == 0x14 || reg == 0x15) && (*value & 0x7fU) != 40U)
++		return -ERANGE;
++	return 0;
++}
++
++int t736_uboot_cpuclock_init(void)
++{
++	struct t736_twi bus = {NULL, twi_read, twi_write, counter_low,
++		COUNTER_HZ / 100U, POLL_LIMIT, 0, 0};
++	struct t736_cpuclock_io io = {&bus, mmio_read, mmio_write, delay_checked,
++		pmic_read, 0, 0};
++	struct t736_cpuclock_report r;
++	uint64_t midr, mpidr, frequency;
++	int rc;
++	asm volatile("mrs %0, midr_el1" : "=r"(midr));
++	asm volatile("mrs %0, mpidr_el1" : "=r"(mpidr));
++	asm volatile("mrs %0, cntfrq_el0" : "=r"(frequency));
++	io.midr = (uint32_t)midr;
++	io.mpidr = (uint32_t)mpidr;
++	if (frequency != COUNTER_HZ || delay_checked(NULL, 20)) {
++		puts("CPU-B1: timer invalid; clocks unchanged, boot continues\n");
++		return 0;
++	}
++	rc = t736_cpuclock_prepare(&io, &r);
++	printf("CPU-B1: rc=%d stage=%u core=%08x/%08x xo=%08x ppu=%x/%x\n",
++	       rc, r.stage, r.midr, r.mpidr, r.crystal, r.ppu6, r.ppu7);
++	printf("CPU-B1: B %08x/%08x/%08x -> %08x/%08x/%08x mutation=%u rollback=%u/%d slow=%u guard=%u\n",
++	       r.before_ctrl, r.before_stat, r.before_clk, r.final_ctrl, r.final_stat,
++	       r.final_clk, r.mutation_attempted, r.rollback_attempted,
++	       r.rollback_error, r.slow_verified, r.guard_failure);
++	printf("CPU-B1: PMIC %02x/%02x/%02x/%02x/%02x/%02x -> %02x/%02x/%02x/%02x/%02x/%02x\n",
++	       r.supply_before.id, r.supply_before.enable, r.supply_before.dcdc3,
++	       r.supply_before.dcdc4, r.supply_before.phase, r.supply_before.feedback,
++	       r.supply_after.id, r.supply_after.enable, r.supply_after.dcdc3,
++	       r.supply_after.dcdc4, r.supply_after.phase, r.supply_after.feedback);
++	if (!rc) {
++		puts("CPU-B1: A76 configured N39/1=1014MHz, PMIC 900mV, guards unchanged\n");
++		return 0;
++	}
++	if (!r.mutation_attempted && !r.guard_failure) {
++		puts("CPU-B1: precondition rejected; clocks unchanged, boot continues\n");
++		return 0;
++	}
++	if (!r.rollback_error && !r.guard_failure && r.slow_verified &&
++	    r.final_ctrl == r.final_stat &&
++	    (r.final_ctrl & ~0xff00U) == (T736_CPUCLOCK_ORIGINAL & ~0xff00U) &&
++	    ((r.final_ctrl & 0xff00U) == 0x1400U || (r.final_ctrl & 0xff00U) == 0x2700U)) {
++		puts("CPU-B1: safe slow/PLL-off fallback; committed N retained\n");
++		return 0;
++	}
++	puts("CPU-B1: unsafe restoration; halt before releasing secondaries\n");
++	return -EIO;
++}
+diff --git a/board/t736/bringup/twi.c b/board/t736/bringup/twi.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..8a5d44157cfc2ff742e7d73ca06e0af1ceb7c22b
+--- /dev/null
++++ b/board/t736/bringup/twi.c
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* T736 User Manual v0.90, 18.11.10: S_TWI0 byte engine.
++ * INT_FLAG is W1C. No automatic retries: PMIC writes must be explicit.
++ */
++#include "twi.h"
++
++static int valid(const struct t736_twi *b)
++{
++	return b && b->read && b->write && b->ticks &&
++		b->timeout_ticks && b->timeout_ticks < 0x80000000u && b->poll_limit;
++}
++
++static int wait_mask(struct t736_twi *b, uint32_t reg, uint32_t mask, uint32_t value)
++{
++	uint32_t begin = b->ticks(b->ctx), count;
++	for (count = 0; count < b->poll_limit; count++) {
++		if ((b->read(b->ctx, reg) & mask) == value)
++			return TWI_OK;
++		if ((uint32_t)(b->ticks(b->ctx) - begin) >= b->timeout_ticks)
++			break;
++	}
++	return TWI_TIMEOUT;
++}
++
++static int reset(struct t736_twi *b)
++{
++	b->write(b->ctx, TWI_RESET, 1);
++	return wait_mask(b, TWI_RESET, 1, 0);
++}
++
++static int state(struct t736_twi *b, unsigned expected)
++{
++	int rc = wait_mask(b, TWI_CTRL, TWI_IF, TWI_IF);
++	b->last_status = b->read(b->ctx, TWI_STATUS) & 0xff;
++	if (rc)
++		return rc;
++	if (b->last_status == expected)
++		return TWI_OK;
++	switch (b->last_status) {
++	case 0x20: case 0x30: case 0x48: return TWI_NACK;
++	case 0x38: return TWI_ARBITRATION;
++	case 0: return TWI_BUS_ERROR;
++	default: return TWI_UNEXPECTED;
++	}
++}
++
++static int stop(struct t736_twi *b)
++{
++	int rc;
++	b->write(b->ctx, TWI_CTRL, TWI_EN | TWI_STOP | TWI_IF);
++	rc = wait_mask(b, TWI_CTRL, TWI_STOP, 0);
++	if (rc)
++		return rc;
++	return wait_mask(b, TWI_STATUS, 0xff, 0xf8);
++}
++
++static int finish(struct t736_twi *b, int rc)
++{
++	/* After arbitration loss we no longer own the wires: never send STOP. */
++	b->cleanup_error = rc == TWI_ARBITRATION ? reset(b) : stop(b);
++	if (b->cleanup_error && rc != TWI_ARBITRATION)
++		(void)reset(b);
++	return rc ? rc : b->cleanup_error;
++}
++
++static int send(struct t736_twi *b, uint8_t value, unsigned expected)
++{
++	b->write(b->ctx, TWI_DATA, value);
++	b->write(b->ctx, TWI_CTRL, TWI_EN | TWI_IF);
++	return state(b, expected);
++}
++
++static int begin(struct t736_twi *b, uint8_t address, uint8_t reg)
++{
++	int rc;
++	b->cleanup_error = 0;
++	/* No attempt to clear a stuck bus by clocking the PMIC blindly. */
++	if ((b->read(b->ctx, TWI_LINE) & 0x30) != 0x30 ||
++	    (b->read(b->ctx, TWI_STATUS) & 0xff) != 0xf8)
++		return TWI_BUSY;
++	b->write(b->ctx, TWI_CTRL, TWI_EN | TWI_START | TWI_IF);
++	rc = state(b, 0x08);
++	if (!rc)
++		rc = send(b, (uint8_t)(address << 1), 0x18);
++	if (!rc)
++		rc = send(b, reg, 0x28);
++	return rc;
++}
++
++int t736_twi_init(struct t736_twi *b)
++{
++	int rc;
++	if (!valid(b))
++		return TWI_INVALID;
++	b->cleanup_error = 0;
++	b->last_status = 0xf8;
++	/* Refuse to take over an active hardware DVFS/packet master. */
++	if ((b->read(b->ctx, TWI_DRV_CTRL) & 0x80000001u) ||
++	    (b->read(b->ctx, TWI_PMU_CTRL) & 0xff))
++		return TWI_BUSY;
++	rc = reset(b);
++	if (rc)
++		return rc;
++	/* 24 MHz / (2^1 * (11 + 1) * 10) = 100 kHz, duty cycle 50%. */
++	b->write(b->ctx, TWI_CLOCK, (11u << 3) | 1u);
++	b->write(b->ctx, TWI_EFR, 0);
++	b->write(b->ctx, TWI_CTRL, TWI_EN);
++	return TWI_OK;
++}
++
++int t736_twi_read8(struct t736_twi *b, uint8_t address, uint8_t reg, uint8_t *value)
++{
++	int rc;
++	uint8_t received = 0;
++	if (!valid(b) || !value || address > 0x7f)
++		return TWI_INVALID;
++	rc = begin(b, address, reg);
++	if (rc == TWI_BUSY)
++		return rc;
++	if (!rc) {
++		b->write(b->ctx, TWI_CTRL, TWI_EN | TWI_START | TWI_IF);
++		rc = state(b, 0x10);
++	}
++	if (!rc)
++		rc = send(b, (uint8_t)((address << 1) | 1), 0x40);
++	if (!rc) {
++		/* One byte only: leave ACK clear and end with a NACK. */
++		b->write(b->ctx, TWI_CTRL, TWI_EN | TWI_IF);
++		rc = state(b, 0x58);
++	}
++	if (!rc)
++		received = (uint8_t)b->read(b->ctx, TWI_DATA);
++	rc = finish(b, rc);
++	if (!rc)
++		*value = received;
++	return rc;
++}
++
++int t736_twi_write8(struct t736_twi *b, uint8_t address, uint8_t reg, uint8_t value)
++{
++	int rc;
++	if (!valid(b) || address > 0x7f)
++		return TWI_INVALID;
++	rc = begin(b, address, reg);
++	if (rc == TWI_BUSY)
++		return rc;
++	if (!rc)
++		rc = send(b, value, 0x28);
++	return finish(b, rc);
++}
+diff --git a/board/t736/bringup/twi.h b/board/t736/bringup/twi.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..c0eb336475ddad80ebcc2506371c762a518f77ec
+--- /dev/null
++++ b/board/t736/bringup/twi.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef T736_EARLY_TWI_H
++#define T736_EARLY_TWI_H
++#include <linux/types.h>
++#ifndef UINT32_C
++#define UINT32_C(x) x##U
++#endif
++
++enum {
++	TWI_DATA = 0x08, TWI_CTRL = 0x0c, TWI_STATUS = 0x10,
++	TWI_CLOCK = 0x14, TWI_RESET = 0x18, TWI_EFR = 0x1c,
++	TWI_LINE = 0x20, TWI_DRV_CTRL = 0x200, TWI_PMU_CTRL = 0x314,
++	TWI_ACK = 4, TWI_IF = 8, TWI_STOP = 16, TWI_START = 32, TWI_EN = 64
++};
++enum t736_twi_error {
++	TWI_OK = 0, TWI_TIMEOUT = -1, TWI_NACK = -2,
++	TWI_ARBITRATION = -3, TWI_BUS_ERROR = -4, TWI_UNEXPECTED = -5,
++	TWI_BUSY = -6, TWI_INVALID = -7
++};
++struct t736_twi {
++	void *ctx;
++	uint32_t (*read)(void *ctx, uint32_t offset);
++	void (*write)(void *ctx, uint32_t offset, uint32_t value);
++	uint32_t (*ticks)(void *ctx);
++	uint32_t timeout_ticks, poll_limit;
++	uint32_t last_status;
++	int cleanup_error;
++};
++int t736_twi_init(struct t736_twi *bus);
++int t736_twi_read8(struct t736_twi *bus, uint8_t address, uint8_t reg, uint8_t *value);
++int t736_twi_write8(struct t736_twi *bus, uint8_t address, uint8_t reg, uint8_t value);
++#endif
+diff --git a/configs/t736_bringup_defconfig b/configs/t736_bringup_defconfig
+new file mode 100644
+index 0000000000000000000000000000000000000000..080f9761612e7ba0acd2983f5e0d783af02e341d
+--- /dev/null
++++ b/configs/t736_bringup_defconfig
+@@ -0,0 +1,47 @@
++CONFIG_ARM=y
++CONFIG_NR_DRAM_BANKS=1
++CONFIG_TARGET_T736_BRINGUP=y
++CONFIG_TEXT_BASE=0x52000000
++CONFIG_CUSTOM_SYS_INIT_SP_ADDR=0x51f00000
++CONFIG_SYS_LOAD_ADDR=0x60000000
++CONFIG_SYS_MALLOC_LEN=0x800000
++CONFIG_DEFAULT_DEVICE_TREE="t736-bringup"
++# CONFIG_OF_UPSTREAM is not set
++CONFIG_POSITION_INDEPENDENT=y
++CONFIG_COUNTER_FREQUENCY=0
++CONFIG_LOCALVERSION="-t736-bringup"
++CONFIG_BOOTDELAY=3
++CONFIG_USE_BOOTCOMMAND=y
++CONFIG_BOOTCOMMAND="setenv kernel_comp_addr_r 0x68000000; if mmc dev 0 && ext4load mmc 0:4 0x60000000 /boot/vmlinuz-6.18.63-t736-armbian && setenv kernel_comp_size ${filesize} && ext4load mmc 0:4 0x64000000 /boot/initrd.img-6.18.63-t736-armbian; then setenv rdsize ${filesize}; if ext4load mmc 0:4 0x63000000 /boot/dtb/allwinner/t736-mainline-bringup.dtb; then setenv bootargs earlycon=uart8250,mmio32,0x02500000 console=ttyS0,115200 root=PARTUUID=a0085546-4166-744a-a353-fca9272b8e48 rootwait rw clk_ignore_unused; booti 0x60000000 0x64000000:${rdsize} 0x63000000; fi; fi"
++CONFIG_HUSH_PARSER=y
++CONFIG_SUPPORT_RAW_INITRD=y
++# CONFIG_BOOTSTD is not set
++# CONFIG_DISPLAY_CPUINFO is not set
++CONFIG_DISPLAY_BOARDINFO=y
++CONFIG_ENV_IS_NOWHERE=y
++CONFIG_CMD_BDI=y
++CONFIG_CMD_MEMINFO=y
++CONFIG_CMD_MEMORY=y
++CONFIG_CMD_CRC32=y
++CONFIG_CMD_CACHE=y
++CONFIG_CMD_FDT=y
++CONFIG_CMD_BOOTI=y
++CONFIG_LEGACY_IMAGE_FORMAT=y
++CONFIG_SYS_PROMPT="T736-mainline=> "
++CONFIG_DEBUG_UART=y
++CONFIG_DEBUG_UART_NS16550=y
++CONFIG_DEBUG_UART_BASE=0x02500000
++CONFIG_DEBUG_UART_CLOCK=24000000
++CONFIG_DEBUG_UART_SHIFT=2
++CONFIG_DEBUG_UART_ANNOUNCE=y
++CONFIG_SYS_NS16550=y
++CONFIG_SYS_NS16550_MEM32=y
++# CONFIG_NET is not set
++CONFIG_MMC=y
++CONFIG_DM_MMC=y
++CONFIG_CMD_MMC=y
++# CONFIG_MMC_WRITE is not set
++CONFIG_FS_EXT4=y
++CONFIG_CMD_EXT4=y
++CONFIG_EFI_PARTITION=y
++# CONFIG_EFI_LOADER is not set
+diff --git a/drivers/mmc/Makefile b/drivers/mmc/Makefile
+index a23336d7d8d7671fc67f9166a02442be435d1989..0d7baba22eb4cd6cb2113b291887796d41b49a06 100644
+--- a/drivers/mmc/Makefile
++++ b/drivers/mmc/Makefile
+@@ -4,6 +4,7 @@
+ # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+ 
+ obj-y += mmc.o
++obj-$(CONFIG_TARGET_T736_BRINGUP) += t736_mmc.o
+ obj-$(CONFIG_$(PHASE_)DM_MMC) += mmc-uclass.o
+ 
+ ifdef CONFIG_$(PHASE_)DM_MMC
+diff --git a/drivers/mmc/t736_mmc.c b/drivers/mmc/t736_mmc.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..c9ef8b720259ee728df3bc1863bc46669c33ec76
+--- /dev/null
++++ b/drivers/mmc/t736_mmc.c
+@@ -0,0 +1,219 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* T736 SMHC3: documented registers, read-only PIO and inherited power rails. */
++#include <dm.h>
++#include <mmc.h>
++#include <asm/io.h>
++#include <linux/delay.h>
++#include <linux/errno.h>
++#include <linux/iopoll.h>
++
++#define CTRL 0x00
++#define CLKDIV 0x04
++#define TIMEOUT 0x08
++#define WIDTH 0x0c
++#define BLOCKSIZE 0x10
++#define BYTECOUNT 0x14
++#define COMMAND 0x18
++#define ARGUMENT 0x1c
++#define RESPONSE 0x20
++#define IRQMASK 0x30
++#define IRQSTATUS 0x38
++#define STATUS 0x3c
++#define TIMING 0x5c
++#define CARDRESET 0x78
++#define FIFO 0x200
++#define CMD_START BIT(31)
++#define IRQ_ERRORS 0xbfc2
++
++struct t736_mmc {
++	void __iomem *base;
++	struct mmc_config cfg;
++	struct mmc mmc;
++};
++
++static int update_clock(struct t736_mmc *p)
++{
++	u32 value;
++	int ret;
++
++	writel(CMD_START | BIT(21) | BIT(13), p->base + COMMAND);
++	ret = readl_poll_timeout(p->base + COMMAND, value,
++				!(value & CMD_START), 1000000);
++	writel(~0U, p->base + IRQSTATUS);
++	return ret;
++}
++
++static int t736_set_ios(struct udevice *dev)
++{
++	struct t736_mmc *p = dev_get_plat(dev);
++	unsigned int divisor;
++	int ret;
++
++	writel(BIT(31), p->base + CLKDIV);
++	ret = update_clock(p);
++	if (ret || !p->mmc.clock)
++		return ret;
++	/* New timing mode divides the module clock by two. */
++	divisor = DIV_ROUND_UP(24000000U, 2 * p->mmc.clock);
++	if (!divisor || divisor > 32)
++		return -EINVAL;
++	writel(BIT(31) | (divisor - 1), (void __iomem *)0x02002d30);
++	setbits_le32(p->base + TIMING, BIT(31));
++	writel(p->mmc.bus_width == 8 ? 2 : p->mmc.bus_width == 4 ? 1 : 0,
++	       p->base + WIDTH);
++	writel(BIT(31) | BIT(16), p->base + CLKDIV);
++	ret = update_clock(p);
++	clrbits_le32(p->base + CLKDIV, BIT(31));
++	return ret;
++}
++
++static int t736_send_cmd(struct udevice *dev, struct mmc_cmd *cmd,
++			 struct mmc_data *data)
++{
++	struct t736_mmc *p = dev_get_plat(dev);
++	u32 flags = CMD_START | cmd->cmdidx, status, value;
++	unsigned long start;
++	unsigned int remaining = 0;
++	u8 *dest = NULL;
++	int i, ret;
++
++	if (cmd->cmdidx == 24 || cmd->cmdidx == 25 || cmd->cmdidx == 38 ||
++	    (data && (data->flags & MMC_DATA_WRITE)))
++		return -EROFS;
++	if (data) {
++		if (data->blocks != 1 || (data->blocksize & 3))
++			return -EINVAL;
++		remaining = data->blocksize;
++		dest = (u8 *)data->dest;
++		setbits_le32(p->base + CTRL, BIT(1));
++		ret = readl_poll_timeout(p->base + CTRL, value,
++					!(value & BIT(1)), 100000);
++		if (ret)
++			return ret;
++		writel(data->blocksize, p->base + BLOCKSIZE);
++		writel(remaining, p->base + BYTECOUNT);
++		flags |= BIT(9) | BIT(13);
++	}
++	if (!cmd->cmdidx)
++		flags |= BIT(15);
++	if (cmd->resp_type & MMC_RSP_PRESENT)
++		flags |= BIT(6);
++	if (cmd->resp_type & MMC_RSP_136)
++		flags |= BIT(7);
++	if (cmd->resp_type & MMC_RSP_CRC)
++		flags |= BIT(8);
++	writel(~0U, p->base + IRQSTATUS);
++	writel(cmd->cmdarg, p->base + ARGUMENT);
++	writel(flags, p->base + COMMAND);
++	start = get_timer(0);
++	for (;;) {
++		status = readl(p->base + IRQSTATUS);
++		if (status & IRQ_ERRORS) {
++			debug("T736 CMD%u status=%08x\n", cmd->cmdidx, status);
++			return status & (BIT(8) | BIT(9)) ? -ETIMEDOUT : -EIO;
++		}
++		if (remaining && !(readl(p->base + STATUS) & BIT(2))) {
++			value = readl(p->base + FIFO);
++			memcpy(dest, &value, sizeof(value));
++			dest += sizeof(value);
++			remaining -= sizeof(value);
++		}
++		if (!remaining && (status & BIT(2)) && (!data || (status & BIT(3))))
++			break;
++		if (get_timer(start) > 2000)
++			return -ETIMEDOUT;
++	}
++	if (cmd->resp_type & MMC_RSP_136)
++		for (i = 0; i < 4; i++)
++			cmd->response[i] = readl(p->base + RESPONSE + (3 - i) * 4);
++	else
++		cmd->response[0] = readl(p->base + RESPONSE);
++	if (cmd->resp_type & MMC_RSP_BUSY) {
++		ret = readl_poll_timeout(p->base + STATUS, value,
++					!(value & BIT(9)), 2000000);
++		if (ret)
++			return ret;
++	}
++	writel(~0U, p->base + IRQSTATUS);
++	return 0;
++}
++
++static int t736_get_cd(struct udevice *dev)
++{
++	return 1;
++}
++
++static int t736_probe(struct udevice *dev)
++{
++	static const u8 pins[] = { 0, 1, 5, 6, 8, 9, 10, 11, 13, 14, 15, 16 };
++	struct t736_mmc *p = dev_get_plat(dev);
++	struct mmc_uclass_priv *upriv = dev_get_uclass_priv(dev);
++	void __iomem *reg;
++	u32 value;
++	int i, ret;
++
++	p->base = dev_read_addr_ptr(dev);
++	if (!p->base)
++		return -EINVAL;
++	/* Function 4 selects SMHC3; prior firmware sets rails and pad drive. */
++	for (i = 0; i < ARRAY_SIZE(pins); i++) {
++		reg = (void __iomem *)(0x02000180UL + (pins[i] / 8) * 4);
++		clrsetbits_le32(reg, 0xf << ((pins[i] % 8) * 4),
++			       4 << ((pins[i] % 8) * 4));
++	}
++	writel(BIT(31), (void __iomem *)0x02002d30);
++	clrbits_le32((void __iomem *)0x02002d3c, BIT(16));
++	udelay(10);
++	setbits_le32((void __iomem *)0x02002d3c, BIT(16) | BIT(0));
++	writel(7, p->base + CTRL);
++	ret = readl_poll_timeout(p->base + CTRL, value, !(value & 7), 100000);
++	if (ret)
++		return ret;
++	writel(BIT(31), p->base + CTRL);
++	writel(0, p->base + IRQMASK);
++	writel(~0U, p->base + IRQSTATUS);
++	writel(~0U, p->base + TIMEOUT);
++	writel(0, p->base + CARDRESET);
++	udelay(10);
++	writel(1, p->base + CARDRESET);
++	mdelay(1);
++	p->cfg.name = "T736 SMHC3 read-only PIO";
++	p->cfg.host_caps = MMC_MODE_4BIT | MMC_MODE_8BIT;
++	p->cfg.voltages = MMC_VDD_32_33 | MMC_VDD_33_34;
++	p->cfg.f_min = 400000;
++	p->cfg.f_max = 12000000;
++	p->cfg.b_max = 1;
++	p->mmc.cfg = &p->cfg;
++	p->mmc.dev = dev;
++	p->mmc.priv = p;
++	upriv->mmc = &p->mmc;
++	return 0;
++}
++
++static int t736_bind(struct udevice *dev)
++{
++	struct t736_mmc *p = dev_get_plat(dev);
++
++	return mmc_bind(dev, &p->mmc, &p->cfg);
++}
++
++static const struct dm_mmc_ops t736_ops = {
++	.send_cmd = t736_send_cmd,
++	.set_ios = t736_set_ios,
++	.get_cd = t736_get_cd,
++};
++
++static const struct udevice_id t736_ids[] = {
++	{ .compatible = "allwinner,t736-smhc3-bringup" },
++	{ }
++};
++
++U_BOOT_DRIVER(t736_mmc) = {
++	.name = "t736_mmc",
++	.id = UCLASS_MMC,
++	.of_match = t736_ids,
++	.ops = &t736_ops,
++	.bind = t736_bind,
++	.probe = t736_probe,
++	.plat_auto = sizeof(struct t736_mmc),
++};
+diff --git a/include/configs/t736-bringup.h b/include/configs/t736-bringup.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..53617350947715b00a035ca5aba31d2cffb7139a
+--- /dev/null
++++ b/include/configs/t736-bringup.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++#ifndef __T736_BRINGUP_H
++#define __T736_BRINGUP_H
++#define CFG_SYS_SDRAM_BASE 0x40000000
++#endif

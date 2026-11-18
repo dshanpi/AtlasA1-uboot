@@ -8,10 +8,12 @@ HEADERS=['spl/early/platform.h','spl/early/timer_init.h','spl/early/twi.h','spl/
 LIB=Path('/home/ubuntu/t736-aiot/tina/brandy/dramlib/sun60iw2p1/spl_libdram/libdram');LIB_SHA='5361d148fa097ccc14e15a173523783d0eb1a71969bc76d57eb8e1229ddc6d90'
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
- global OUT
+ global OUT,LIB
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('--variant',choices=['v3','v4','v5'],default='v3')
+ parser.add_argument('--ddr-library',type=Path,default=LIB,help='pinned LPDDR4x training archive')
  args=parser.parse_args()
+ LIB=args.ddr_library.resolve()
  OUT=ROOT/('build/emmc-spl-'+args.variant)
  sources=list(SOURCES);headers=list(HEADERS)
  if args.variant in ('v4','v5'):

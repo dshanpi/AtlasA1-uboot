@@ -1,0 +1,30 @@
+{
+  "board_tree": {
+    "arch/arm/Kconfig": "9a039ca45b32bb725c3a609bbca08a320d7a625b4380c31a4ea0852a627b6266",
+    "arch/arm/dts/Makefile": "bb831077462d0841a3a60a629b0a8bcff1b13495436e9e4c6de96ac7c6318b86",
+    "arch/arm/dts/t736-bringup.dts": "1b52964ee40da7cd1bce329f171c6d9d012e1e51ad95acaad31c9632c4207158",
+    "board/t736/bringup/Kconfig": "5d3a501fe423607896aa7e698253e244e61b40758d48dfa261f7e0fa4b1f214d",
+    "board/t736/bringup/Makefile": "242b856b4732198f52d43eff8913d918feeed75d090dd9ec95353abc4adcc7c7",
+    "board/t736/bringup/a55clock.h": "a452a312e5914db1c0dfb64b565c44f81f46dd2ed333ec6b7e0bf02151b1eef1",
+    "board/t736/bringup/a55clock_d.c": "7b60852c4fb52e048672ff5cfc3cfae3cc008fb83daa3cc734db18c1e85daa25",
+    "board/t736/bringup/a55clock_d.h": "89908c86976549ad3da6b48688e6539ec7a33989b86523535f5d2bc93f59b5a2",
+    "board/t736/bringup/board.c": "cfe365aeb408e32d7a66b964861f062ca99181639c5a4cbb66cf93be27f4bb5c",
+    "board/t736/bringup/cpuclock.c": "8a3ea752474bd8565b865a56087b0a761714da3d3d81ec1919f2df2319be27d4",
+    "board/t736/bringup/cpuclock.h": "6b4e3270e62f7c21b2e11cef50202e7dd07f867e6b511d678362b28ad45b98e6",
+    "board/t736/bringup/cpuclock_c.c": "e56bb498000365b5cfe36931008b9143fee718caa74c268c95fd089bddccd4ce",
+    "board/t736/bringup/cpuclock_c.h": "6afe06348036dce648ed4bb8fa759c49a1c5a840a83a1c37490f544820d7e1b6",
+    "board/t736/bringup/t736-uboot-cpuclock-d.c": "82ce1b5fe38e91ff4ba9cec308a60ffd3e199e190a1efbe80c6d225a682161e7",
+    "board/t736/bringup/t736-uboot-cpuclock.c": "feeea9d39e00fde5479d0dce899ca3a3317d9ea33d609996081a347651c10c1f",
+    "board/t736/bringup/twi.c": "a9d9fac6ca5841549a07f6a6eaf8531fe4d0b3f144b691bb4452329224ea6758",
+    "board/t736/bringup/twi.h": "f76c23e80d60ea6101703346177263328b0105796cae63be04b32f5322fff600",
+    "configs/t736_bringup_defconfig": "88ef4bd75ee068bd16cbb193bd714928bbd0926b88217483e700d7d8722112c4",
+    "drivers/mmc/Makefile": "038c6085406a58e337cf83e23c8b8e6c3d6ec223e20925a42509ec37122bee0f",
+    "drivers/mmc/t736_mmc.c": "6e0b900db73c4726b7bd52904ae88cff324938d583c2903cc68863c9aefcb8a3",
+    "include/configs/t736-bringup.h": "50a899217235e757e2b24523ac2d20a6bdc468801de1adce7352b93bf359b47b"
+  },
+  "upstream_files": {
+    "arch/arm/Kconfig": "08f5c023188068a6f8e0aa3e7a5b69fc92e278c2ce16399603c86e3e9d571073",
+    "arch/arm/dts/Makefile": "522e09269baef5914106aa066956ce6d3aa25bbf6c93008f188061e718e10d66",
+    "drivers/mmc/Makefile": "11f1d10c8351478724d3291703f95e58ffe7998a7d6296f3f616cedfd0bc2921"
+  }
+}
