@@ -95,6 +95,13 @@
       "sha256": "20d87d3936bf1c93df1a89ac3a933fb5f779d4afeff81a8e8e64f13a397df9bc"
     },
     {
+      "path": "evidence/atlas-ubuntu26-board-rebuild-20261118.json",
+      "kind": "source",
+      "source": "mainline/evidence/atlas-ubuntu26-board-rebuild-20261118.json",
+      "size": 3896,
+      "sha256": "0e2d2d8b15c7075bf313978d27008381a437916a3daac47a5ddfabd61f9e35e7"
+    },
+    {
       "path": "evidence/atlasa1-clean-source-replay-20261118.json",
       "kind": "source",
       "source": "mainline/evidence/atlasa1-clean-source-replay-20261118.json",

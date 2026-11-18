@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "board": "AtlasA1 (Allwinner T736)",
+  "system": "Armbian Ubuntu 26.04 LTS (Resolute), arm64",
+  "build_test_scope": "Cross-compiled boot chain, kernel, PowerVR KM, OMX broker and native player. Host-side and AArch64 QEMU transport tests. These checks do not execute the new Ubuntu image on AtlasA1 hardware.",
+  "boot": {
+    "root_partuuid": "a0085546-4166-744a-a353-fca9272b8e48",
+    "spl_sha256": "a1d821eaee602fdf8b481c38cf4790d0f8a6f31539dd9fc6c1a714c1e92bd0ea",
+    "boot_package_sha256": "d8e285a172f70b0b4c0028972657cf5ebec9f32946a112a27c44cc638faf8f5e",
+    "package_start_lba": 24576,
+    "components": [
+      {
+        "name": "stage64.bin",
+        "lba": 24577,
+        "address": "0x47000000",
+        "size": 5040,
+        "sha256": "44aeb8e56f64f2ccd80a1cd286460eda6d0232f9cc1e82618866826b23298535",
+        "crc32": "caa77399"
+      },
+      {
+        "name": "bl31.bin",
+        "lba": 24587,
+        "address": "0x48000000",
+        "size": 53924,
+        "sha256": "81f53c1d1f571c74bd907317d813a5ed56c64382479caa75edd3cec43ada6dc6",
+        "crc32": "aa2158fa"
+      },
+      {
+        "name": "u-boot.bin",
+        "lba": 24693,
+        "address": "0x52000000",
+        "size": 265640,
+        "sha256": "fd3ffd3d5584642ad0eb0be645941b671591d47d1e2fc575c8a30d3b539c00c3",
+        "crc32": "6b4439f6"
+      }
+    ],
+    "hardware_tested": false
+  },
+  "kernel": {
+    "kernel_release": "6.18.63-t736-media-v30",
+    "kernel_version": "6.18.63-30",
+    "upstream_git_commit": "1cdda838e8475edf89b73ff0cc952005dd0b1fa7",
+    "compiler": "13.3.0",
+    "files_sha256": {
+      "linux-image-6.18.63-t736-media-v30_6.18.63-30_arm64.deb": "cd8bdf6f3d807a2d448221b6f7a731cb3d60dfb2ca6b7476caac2f3eb3954360",
+      "kout/arch/arm64/boot/Image": "aa6eddd2d78862a2a4edcd3874ee71ea5a974ba3f6d53ab757d9acffbd556fc0",
+      "kout/arch/arm64/boot/dts/allwinner/t736-gpu-candidate.dtb": "45012aeb86d657fca568417e831067170d12e224ebe71720c1956989af6f3626",
+      "pvr-out/target_aarch64/kbuild/pvrsrvkm.ko": "2cc8a27efcedd3093c66b77faede7364e15adc41ac439472fac28d3f56d1ea14"
+    },
+    "module_symvers_sha256": "2c78cfcd32781c9121ff5b6effae05ca5e51e97f1bffa1556bd2f778c4fb0cc9",
+    "pvr_vermagic": "6.18.63-t736-media-v30 SMP mod_unload aarch64",
+    "pvr_text_section_sha256": "acee628ed46bd50c24d6ef33a7bdbb28534a501a90af0c502056730fc08f8675",
+    "compared_to_separate_clean_board_build": {
+      "Image": "identical",
+      "device_tree": "identical",
+      "Module.symvers": "identical",
+      "pvr_module_text_section": "identical"
+    }
+  },
+  "media": {
+    "producer_hashes_sha256": {
+      "atlasa1-player_0.1-5~resolute1_arm64.deb": "96211897481bb80024c1382f74efb6d5f1affa5db97ec0fb3b1ff3da4ff51db2",
+      "t736-img-userspace-candidate_24.2.6603887-2_arm64.deb": "1455889d0c10ec5d0b49e839e0e9d3f7560869e65da5fbee02e477039c78e16e",
+      "t736-cedar-wc-v5.tar.gz": "fb2644eaf61ad5d2f06c6fecd00e8ec64c6695d79d4eff9cf915eeac3a15b7ba",
+      "rebuilt-libOmxVdec.so": "785d6b269229a9d0b60e53be19a38d2d626bfa864c36a1fab70dbc5dea57fdc3",
+      "cedar-broker": "1910bf0ce66653d27fe67f99d2a1ce8b813dafec3893f981a8d7c662a61f3b04",
+      "libcedar_backend.so": "2185f2019b4aea60933c34d387d290e808848e420f8899b0b401783293145583"
+    },
+    "services_match_preceding_board_measurement": true,
+    "transport_test": {
+      "host": "Passed full-size transport regression, 4K OPEN / 1080p PULL over SHM, opt-in, PTS/color/pixels, short buffer, retained-mode separation and scaled reopen",
+      "arm": "Passed full-size transport regression, 4K OPEN / 1080p PULL over SHM, opt-in, PTS/color/pixels, short buffer, retained-mode separation and scaled reopen"
+    }
+  },
+  "desktop": {
+    "default": "LightDM, Xfce on Xorg; board-specific IMG EGL/GLES libraries",
+    "additional": "GNOME on Wayland, GDM installed",
+    "hardware_acceptance_of_resolute_desktop": false
+  }
+}
