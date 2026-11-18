@@ -60,8 +60,8 @@
   "media": {
     "producer_hashes_sha256": {
       "atlasa1-player_0.1-5~resolute1_arm64.deb": "96211897481bb80024c1382f74efb6d5f1affa5db97ec0fb3b1ff3da4ff51db2",
-      "t736-img-userspace-candidate_24.2.6603887-2_arm64.deb": "1455889d0c10ec5d0b49e839e0e9d3f7560869e65da5fbee02e477039c78e16e",
-      "t736-cedar-wc-v5.tar.gz": "fb2644eaf61ad5d2f06c6fecd00e8ec64c6695d79d4eff9cf915eeac3a15b7ba",
+      "t736-img-userspace-candidate_24.2.6603887-2_arm64.deb": "0c5e0186f731c972c7a7e1bad1952f12b705b6332027e7f3cb3d3f531ac8f3cb",
+      "t736-cedar-wc-v5.tar.gz": "ec911617b4cde758fe34c6cb083760af418c165f0051fd7404a7543a071a05fe",
       "rebuilt-libOmxVdec.so": "785d6b269229a9d0b60e53be19a38d2d626bfa864c36a1fab70dbc5dea57fdc3",
       "cedar-broker": "1910bf0ce66653d27fe67f99d2a1ce8b813dafec3893f981a8d7c662a61f3b04",
       "libcedar_backend.so": "2185f2019b4aea60933c34d387d290e808848e420f8899b0b401783293145583"
@@ -70,7 +70,14 @@
     "transport_test": {
       "host": "Passed full-size transport regression, 4K OPEN / 1080p PULL over SHM, opt-in, PTS/color/pixels, short buffer, retained-mode separation and scaled reopen",
       "arm": "Passed full-size transport regression, 4K OPEN / 1080p PULL over SHM, opt-in, PTS/color/pixels, short buffer, retained-mode separation and scaled reopen"
-    }
+    },
+    "vendor_inputs": "Rebuilt from the configured T736 Tina SDK using tools/build_atlasa1_resolute_vendor.sh. Unchanged SDK ELF and firmware files are cross-checked against the board inventory.",
+    "recompiled_wc_matching_text_sha256": {
+      "libcdc_base.so": "6fdc0ba865c7cd3751e5d0c2f8bf6b3ae4edc02c27d6817b7060a1675f033c66",
+      "libMemAdapter.so": "b0bf5791acfbade98e727ba8b8636a0334720ca98645c2771ba047ca1b3c558c",
+      "libgstomx.so": "ec48eb797403ca7f7eebcdce3216a1745e114951bea4ea3e812f8a418e3577b7"
+    },
+    "omx_4k_buffer_patch": "Rebuilt from the configured Tina SDK, checked for the board-specific parameter. Its ELF SHA-256 is recorded separately."
   },
   "desktop": {
     "default": "LightDM, Xfce on Xorg; board-specific IMG EGL/GLES libraries",
