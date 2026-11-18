@@ -1,9 +1,16 @@
-# T736 Armbian FES/raw 流程
+# AtlasA1 / T736 Armbian FES 烧录
 
-> 当前 v6–v11 镜像保留 Tina 运行时启动链，不符合用户要求，不能作为最终交付。目标是 Tina 仅用于 RAM 中的 FES 烧录，正常 eMMC 启动使用独立启动链。
+## Ubuntu 26.04 RC1 实板流程
 
-目标流程中 Tina 只提供 RAM 中的 DRAM/FES 服务。现有 v6–v11 的 loader 文件确实只在 RAM 中使用，但 raw 本身仍包含 Tina 运行时启动组件，因此尚未满足该目标。
-参考流程来自 https://github.com/dshanpi/AvaotaA1-T527-MainLineLinux ，但不复用 T527 的板级二进制或 SPL。
+1. 从 Release 下载 `.img.xz`、`SHA256SUMS` 和 `.manifest.json`。核对压缩文件的 SHA-256 后解压，得到 8,589,934,592 字节的整盘 `.img`，SHA-256 为 `01235d344087d299e70cf4581d18385b76db1cac02cf3a9471055bc0ca9c1232`。[RC1 下载](https://github.com/dshanpi/AtlasA1-build/releases/tag/v2026.11.18-ubuntu26.04-rc1)
+2. 准备本板 LPDDR4x 的 RAM FES loader，长度为 1,482,752 字节，SHA-256 为 `565436e6d6f4370d05788afa3397a7e2368b5d5d2cef9a6490700b9b944cee08`。AtlasA1-build 提供了从匹配 Tina 恢复固件提取 loader 的命令。[准备和烧录说明](https://github.com/dshanpi/AtlasA1-build/blob/main/docs/UBUNTU_26_04.md)
+3. 将本板 OTG 接到烧录主机，进入 FEL。在 Openix 中选择该端口对应的设备。使用 raw 的 `command` 模式，将 `.img` 写入 eMMC 用户区，启用校验，写后动作选择 `none`。这个操作会覆盖目标盘上镜像范围内的内容。Windows Openix 曾在 FEL 转 FES 后等待重连超时。本次确认首次任务已经退出、数据传输为零和相同 USB 端口已枚举 FES，随后才重新启动 raw 写入。
+4. 等待写入、提交和校验全部完成，再断电上电。2026-11-18 的实测确认写入和提交均为 8,589,934,592 字节，校验成功。断电 5 秒后，串口全程自动通过固定 LPDDR4x 初始化、TF-A、U-Boot 2026.10 和 Linux `6.18.63-t736-media-v30`，直到 `atlasa1 login:`。正常启动中的 SPL 使用厂家 DDR 训练库。[FES 和串口验收记录](../evidence/atlasa1-ubuntu26-rc1-fes-coldboot-20261118.json)
+5. 登录后检查 `uname -r`、`findmnt -no SOURCE /` 和 `systemctl is-active display-manager`。本板从 `/dev/mmcblk0p4` 启动，显示管理器为 `active`。在大于 8 GiB 的 eMMC 上，首次写入后备份 GPT 位于镜像末端。板级工具提供分区表备份和迁移，步骤见发行说明。[安装后检查](https://github.com/dshanpi/AtlasA1-build/blob/main/docs/UBUNTU_26_04.md)
+
+## v6–v11 历史启动链
+
+以下记录对应旧版镜像。v6–v11 在 RAM 中运行 FES loader，正常启动还使用 Tina Boot0 和 U-Boot 2018 将控制权交给源码 U-Boot。下文中的扇区位置、内核版本及板端验证均属于对应的历史镜像。[参考流程](https://github.com/dshanpi/AvaotaA1-T527-MainLineLinux)
 
 ## v6 历史调试输入（不用于最终交付）
 
