@@ -83,5 +83,39 @@
     "default": "LightDM, Xfce on Xorg; board-specific IMG EGL/GLES libraries",
     "additional": "GNOME on Wayland, GDM installed",
     "hardware_acceptance_of_resolute_desktop": false
+  },
+  "ubuntu_arm64_qemu_preflight": {
+    "scope": "Separate Ubuntu 26.04 AArch64 library tree with the same board packages and vendor overlay; no device, KMS or physical screen supplied.",
+    "gstreamer": "1.28.2",
+    "factory_loads": [
+      "appsrc",
+      "appsink",
+      "capsfilter",
+      "h264parse",
+      "h265parse",
+      "omxh264dec",
+      "omxhevcvideodec"
+    ],
+    "omx_factory_library": "/opt/t736-cedar-wc-v5/lib/gstreamer-1.0/libgstomx.so",
+    "one_frame_annex_b_parsed_bytes": {
+      "h264": 777,
+      "hevc": 2426
+    },
+    "xorg": "2:21.1.22-1ubuntu1.3, Xorg -version with LD_BIND_NOW=1 and vendor EGL/GLES search path",
+    "player_decoders_listed": [
+      "h264_cedar",
+      "hevc_cedar"
+    ],
+    "ffplay_software_smoke": {
+      "codec": "HEVC",
+      "dimensions": [
+        64,
+        64
+      ],
+      "frames": 1,
+      "showinfo_checksum": "F0790878",
+      "sdl": "dummy/software",
+      "exit_status": 0
+    }
   }
 }

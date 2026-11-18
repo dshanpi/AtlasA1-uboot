@@ -98,8 +98,8 @@
       "path": "evidence/atlas-ubuntu26-board-rebuild-20261118.json",
       "kind": "source",
       "source": "mainline/evidence/atlas-ubuntu26-board-rebuild-20261118.json",
-      "size": 4568,
-      "sha256": "c49ca209d743c17d55dcaf462b6215dbcc98093015d1d99e272f561eb0a98590"
+      "size": 5526,
+      "sha256": "d5b9eecdfc3352b221130390d9ae64dc91c0c8dc215da23a77b5eeba08e81bb6"
     },
     {
       "path": "evidence/atlasa1-clean-source-replay-20261118.json",
