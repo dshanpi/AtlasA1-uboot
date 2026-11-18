@@ -109,6 +109,13 @@
       "sha256": "4712a36cd25346a09b322b19cf7954ab61de3aa636495727eb2b7f95473789e2"
     },
     {
+      "path": "evidence/atlasa1-ubuntu26-rc1-fes-coldboot-20261118.json",
+      "kind": "source",
+      "source": "mainline/evidence/atlasa1-ubuntu26-rc1-fes-coldboot-20261118.json",
+      "size": 7044,
+      "sha256": "63bd2b03c2d82c2cba5834466682f914a2b1f96c21b5ef392efd148b9aa36bce"
+    },
+    {
       "path": "evidence/source-uboot-backup-audit-20261115.json",
       "kind": "source",
       "source": "mainline/evidence/source-uboot-backup-audit-20261115.json",

@@ -1,0 +1,159 @@
+{
+  "board": "AtlasA1 / T736",
+  "date": "2026-11-18",
+  "release_tag": "v2026.11.18-ubuntu26.04-rc1",
+  "emmc_raw_sha256": "01235d344087d299e70cf4581d18385b76db1cac02cf3a9471055bc0ca9c1232",
+  "ram_fes_loader_sha256": "565436e6d6f4370d05788afa3397a7e2368b5d5d2cef9a6490700b9b944cee08",
+  "mode": "OpenixCLI raw command, eMMC user area, verification enabled, post-action none",
+  "initial_reconnect": {
+    "taskId": "flash-1795013882632104200",
+    "state": "failed",
+    "phase": "reconnecting",
+    "transferredBytes": 0,
+    "writtenBytes": null,
+    "committedBytes": null,
+    "totalBytes": 0,
+    "verifyState": "not_run",
+    "verifyErrorCode": null,
+    "startedAt": 1795013883,
+    "finishedAt": 1795013931
+  },
+  "reconnect_note": "The first task transferred no disk bytes. After the task exited, the same bound USB device was confirmed online with the FES loader running, then the second task wrote the image.",
+  "completed_flash": {
+    "taskId": "flash-1795014064046487700",
+    "state": "success",
+    "phase": "complete",
+    "transferredBytes": 8589934592,
+    "writtenBytes": 8589934592,
+    "committedBytes": 8589934592,
+    "totalBytes": 8589934592,
+    "verifyState": "success",
+    "verifyErrorCode": 0,
+    "startedAt": 1795014065,
+    "finishedAt": 1795014511
+  },
+  "boot": {
+    "power_off_ms": 5000,
+    "default_emmc_boot": true,
+    "uboot_console_interrupted": false,
+    "serial_username": "t736",
+    "serial_login_passed": true,
+    "host_key_enrolled_via_uart": true,
+    "ssh_sudo_uid": 0,
+    "uart_private_log_sha256": "aeebbf0d773645e26c43da6d98d2162fef3eb95a22cf48395f395d8d37bc712b",
+    "uart_selected_lines": [
+      "DRAM Type =8 (8:LPDDR4,9:LPDDR5)",
+      "SPL eMMC open rc=0 sectors=122142720 irq=0 r1=900",
+      "SPL load addr=47000000 bytes=5040 LBA=24577",
+      "SPL load addr=48000000 bytes=53924 LBA=24587",
+      "SPL load addr=52000000 bytes=265640 LBA=24693",
+      "SPL payload CRCs passed; source AArch64 handoff",
+      "NOTICE:  BL31: v2.15.0(debug):t736-independent-candidate-7d322909",
+      "NOTICE:  BL31: Detected Allwinner A733 SoC (1903)",
+      "U-Boot 2026.10-t736-bringup (Nov 18 2026 - 00:00:00 +0000)",
+      "DRAM:  8 GiB",
+      "Hit any key to stop autoboot: 3Hit any key to stop autoboot: 2Hit any key to stop autoboot: 1Hit any key to stop autoboot: 0",
+      "5058908 bytes read in 1001 ms (4.8 MiB/s)",
+      "18499702 bytes read in 3657 ms (4.8 MiB/s)",
+      "13012 bytes read in 4 ms (3.1 MiB/s)",
+      "Starting kernel ...",
+      "Linux version 6.18.63-t736-media-v30 (ubuntu@ubuntu2404) (aarch64-linux-gnu-gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #30 SMP 2026-11-18 00:00:00 UTC",
+      "GPT:Primary header thinks Alt. header is not at the end of the disk.",
+      "GPT:16777215 != 122142719",
+      "GPT:Alternate GPT header not at the end of the disk.",
+      "GPT:16777215 != 122142719",
+      "GPT: Use GNU Parted to correct GPT errors.",
+      "EXT4-fs (mmcblk0p4): mounted filesystem 4d8c73ce-75f9-4794-bef2-664d7cecbbbb r/w with ordered data mode. Quota mode: disabled.",
+      "Armbian-unofficial 26.11.0-trunk resolute ttyS0",
+      "atlasa1 login:"
+    ]
+  },
+  "runtime": {
+    "model": "T736 custom board mainline bring-up",
+    "release": "6.18.63-t736-media-v30",
+    "kernel_cmdline": "earlycon=uart8250,mmio32,0x02500000 console=ttyS0,115200 root=PARTUUID=a0085546-4166-744a-a353-fca9272b8e48 rootwait rw clk_ignore_unused t736_mmc_pio.enable_hs200=1 t736_mmc_pio.hs200_max_hz=200000000 t736_mmc_pio.enable_hs400=1 t736_mmc_pio.hs400_max_hz=200000000 t736_cedar_wc.heap_limit_mib=256",
+    "distribution": {
+      "PRETTY_NAME": "Ubuntu 26.04 LTS",
+      "VERSION_ID": "26.04",
+      "VERSION_CODENAME": "resolute"
+    },
+    "root_source": "/dev/mmcblk0p4",
+    "root_fs_uuid": "4d8c73ce-75f9-4794-bef2-664d7cecbbbb",
+    "root_partuuid": "a0085546-4166-744a-a353-fca9272b8e48",
+    "root_mount_options": "rw,noatime,errors=remount-ro",
+    "emmc_product": "A31Y5C",
+    "emmc_total_sectors": 122142720,
+    "emmc_timing": "clock:\t\t200000000 Hz\nactual clock:\t200000000 Hz\nvdd:\t\t21 (3.3 ~ 3.4 V)\nbus mode:\t2 (push-pull)\nchip select:\t0 (don't care)\npower mode:\t2 (on)\nbus width:\t3 (8 bits)\ntiming spec:\t10 (mmc HS400)\nsignal voltage:\t1 (1.80 V)\ndriver type:\t0 (driver type B)",
+    "emmc_boot_regions": {
+      "spl_sha256": "a1d821eaee602fdf8b481c38cf4790d0f8a6f31539dd9fc6c1a714c1e92bd0ea",
+      "boot_package_sha256": "d8e285a172f70b0b4c0028972657cf5ebec9f32946a112a27c44cc638faf8f5e",
+      "stage64_bl31_uboot_sha256": [
+        "44aeb8e56f64f2ccd80a1cd286460eda6d0232f9cc1e82618866826b23298535",
+        "81f53c1d1f571c74bd907317d813a5ed56c64382479caa75edd3cec43ada6dc6",
+        "fd3ffd3d5584642ad0eb0be645941b671591d47d1e2fc575c8a30d3b539c00c3"
+      ]
+    },
+    "gpt_mirror_matches": true,
+    "gpt_backup_lba": 16777215,
+    "boot_files": {
+      "boot/vmlinuz-6.18.63-t736-media-v30": "3d9e2475cef78841572b0f138508fe0460dc301e4fdfcfe77e39e8193a3fb335",
+      "boot/initrd.img-6.18.63-t736-media-v30": "062b16d9d2551cb2360ea8984d3ef9ebcc0f4466f5d266600d6f5aa2c7f70f75",
+      "boot/dtb/allwinner/t736-mainline-bringup.dtb": "45012aeb86d657fca568417e831067170d12e224ebe71720c1956989af6f3626"
+    },
+    "boot_identity_checks": {
+      "release": true,
+      "ubuntu": true,
+      "rootfs_uuid": true,
+      "root_partuuid": true,
+      "spl": true,
+      "boot_package": true,
+      "stage64_bl31_uboot": true,
+      "boot_files": true
+    },
+    "emmc_4m_fsync_direct_read": true,
+    "network": {
+      "operstate": "up",
+      "carrier": "1",
+      "speed": "100",
+      "duplex": "full"
+    },
+    "drm": {
+      "card0-HDMI-A-1": "connected",
+      "card0-Writeback-1": "unknown"
+    },
+    "systemd": {
+      "running": "degraded",
+      "failed": "run-rpc_pipefs.mount  loaded failed failed RPC Pipe File System\nsmartmontools.service loaded failed failed Self Monitoring and Reporting Technology (SMART) Daemon",
+      "units": {
+        "lightdm.service": "active",
+        "display-manager.service": "active",
+        "NetworkManager.service": "active",
+        "ssh.socket": "active",
+        "ssh.service": "active",
+        "t736-cedar.socket": "active"
+      }
+    },
+    "display": {
+      "sessions": "c1  109 lightdm seat0 1313 greeter       -     no -\nc10 1000 t736    -     4347 user          -     no -\n c2  109 lightdm -     1357 manager-early -     no -\n c3 1000 t736    -     1044 user          ttyS0 no -\n c4 1000 t736    -     2054 manager       -     no -",
+      "xorg": "1042",
+      "lightdm": "1032\n1313\n1713",
+      "dri": [
+        "card0",
+        "card1",
+        "renderD128"
+      ]
+    },
+    "irq_drivers": {
+      "t736-cedar-wc": true
+    }
+  },
+  "lightdm_greeter_randr": {
+    "output": "HDMI-1",
+    "connected": true,
+    "primary": true,
+    "width": 1920,
+    "height": 1080,
+    "refresh_hz": 60.0,
+    "method": "Read-only XRandR current-mode query on the running greeter; no physical monitor observation."
+  }
+}
