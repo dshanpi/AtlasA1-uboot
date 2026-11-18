@@ -1,0 +1,15 @@
+# Generated build products and private inputs
+output/
+build/
+tmp/
+private/
+*.img
+*.raw
+*.deb
+*.bin
+*.so
+*.ko
+*.o
+*.a
+*.pyc
+__pycache__/

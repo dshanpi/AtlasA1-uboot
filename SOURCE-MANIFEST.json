@@ -1,0 +1,1827 @@
+{
+  "schema": 1,
+  "repository": "AtlasA1-uboot",
+  "generated_from": "workspace/mainline",
+  "files": [
+    {
+      "path": ".gitignore",
+      "kind": "generated",
+      "source": "generated/AtlasA1-uboot/.gitignore",
+      "size": 136,
+      "sha256": "16b916bff69d1742a8f19b8f59d34a917cc523458e278e2dc859aa2ef70ebd29"
+    },
+    {
+      "path": "README.md",
+      "kind": "generated",
+      "source": "generated/AtlasA1-uboot/README.md",
+      "size": 363,
+      "sha256": "8035dc7db0a920864edca2b98639e43fa518893f8f4b07d629dce5844a4824bb"
+    },
+    {
+      "path": "config/t736-lp4-radxa-dram-overlay.fex",
+      "kind": "source",
+      "source": "mainline/config/t736-lp4-radxa-dram-overlay.fex",
+      "size": 870,
+      "sha256": "ed54333c89e6da94834712984441bf7d0643ec7088e18b143f4b9262d509c57c"
+    },
+    {
+      "path": "config/t736-lp4x-fixed.fex",
+      "kind": "source",
+      "source": "mainline/config/t736-lp4x-fixed.fex",
+      "size": 944,
+      "sha256": "f5b7f2e47ca2ce0cd25ff170d1d56655975ff113431fbb5ef9d33ae7e7c9af99"
+    },
+    {
+      "path": "config/u-boot-source-v6.config",
+      "kind": "source",
+      "source": "mainline/config/u-boot-source-v6.config",
+      "size": 29986,
+      "sha256": "3d8d55d5a2ee90933e12ed5d17ff37a6e15760b0e6b69764ff6710242a16c7ad"
+    },
+    {
+      "path": "docs/BACKUP_SOURCE_V6.md",
+      "kind": "source",
+      "source": "mainline/docs/BACKUP_SOURCE_V6.md",
+      "size": 5434,
+      "sha256": "b28a95510461def0fc522522b636d5e4cce022b099fabcdfa2c89d3a879dc02f"
+    },
+    {
+      "path": "docs/BOOT_CHAIN.md",
+      "kind": "source",
+      "source": "mainline/docs/BOOT_CHAIN.md",
+      "size": 7888,
+      "sha256": "4bc7bced35d21ea2b44b79ef683b5563a54a915d7c9fc31c5b1593cf4a078692"
+    },
+    {
+      "path": "docs/FES_RAW.md",
+      "kind": "source",
+      "source": "mainline/docs/FES_RAW.md",
+      "size": 4952,
+      "sha256": "20d87d3936bf1c93df1a89ac3a933fb5f779d4afeff81a8e8e64f13a397df9bc"
+    },
+    {
+      "path": "patches/tf-a/0001-t736-bl31-dram-layout.patch",
+      "kind": "source",
+      "source": "mainline/patches/tf-a/0001-t736-bl31-dram-layout.patch",
+      "size": 1934,
+      "sha256": "8ca4b5c15c23ce90620c5eb306b4d1d1f848a9a9b8265e9c545b7f21795aa078"
+    },
+    {
+      "path": "patches/u-boot/0001-t736-ram-bringup.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/0001-t736-ram-bringup.patch",
+      "size": 6368,
+      "sha256": "ca15987c0fa3223a5037f4915b02c44e2e4eb968f138759190b20f45152d3c0a"
+    },
+    {
+      "path": "patches/u-boot/t736-cpu-b1.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/t736-cpu-b1.patch",
+      "size": 589,
+      "sha256": "b9e7e8061823ec4f8f123fee0af907a911386e4f7100059a46921254bab84147"
+    },
+    {
+      "path": "patches/u-boot/t736-cpu-b2.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/t736-cpu-b2.patch",
+      "size": 603,
+      "sha256": "348351afff69c014806dc42d28b4e7e504213a83b1f60e60cc2cafa08bbc77ca"
+    },
+    {
+      "path": "patches/u-boot/t736-cpu-c.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/t736-cpu-c.patch",
+      "size": 615,
+      "sha256": "8baa3853e82b983716845686ab60cc47a268c8c8ab16c47f8057abb73bb3e6b3"
+    },
+    {
+      "path": "patches/u-boot/t736-cpu-d.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/t736-cpu-d.patch",
+      "size": 617,
+      "sha256": "61bd8beab9ddb23fe378226d5ad6c924e1e508185ce3d0e65a57d8939a2a0130"
+    },
+    {
+      "path": "patches/u-boot/t736-cpu-r1.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/t736-cpu-r1.patch",
+      "size": 605,
+      "sha256": "9de261d4a2d1829cd8be721f65b7d762f7ae4dcb3b7ac3d8ff8c94838fa99bf4"
+    },
+    {
+      "path": "patches/u-boot/t736-source-boot.patch",
+      "kind": "source",
+      "source": "mainline/patches/u-boot/t736-source-boot.patch",
+      "size": 12804,
+      "sha256": "8c90d197ccb0cecdac42590b98a85a7021aaf05fe053ea6cd9c07e7f540463b9"
+    },
+    {
+      "path": "spl/ccu_probe/README.md",
+      "kind": "source",
+      "source": "mainline/spl/ccu_probe/README.md",
+      "size": 2232,
+      "sha256": "a873e6747d970aaaeea27cd491f50de41da62334f0df211c3078dcffeef2bd04"
+    },
+    {
+      "path": "spl/ccu_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/ccu_probe/probe.c",
+      "size": 3292,
+      "sha256": "38f94da3a8cf8a941b2b02994f1d8b3e1238e1091211b50eb31f9762c3e04645"
+    },
+    {
+      "path": "spl/ccu_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/ccu_probe/probe.ld",
+      "size": 954,
+      "sha256": "16ab3f7afb1319335aba5e082febc40274c7e25557894f8839979273ea0d21e5"
+    },
+    {
+      "path": "spl/control_state_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/control_state_probe/probe.c",
+      "size": 3580,
+      "sha256": "4d646a7a36b57976f398383f5c8977a8168f640a88666a70e29d5ecad47a0147"
+    },
+    {
+      "path": "spl/control_state_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/control_state_probe/probe.ld",
+      "size": 922,
+      "sha256": "952ed7b66426b17e3d96825a9161b0707234b08524e53272f3969fb93affc9d2"
+    },
+    {
+      "path": "spl/control_state_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/control_state_probe/test_probe.c",
+      "size": 1817,
+      "sha256": "2eb592115066c1c35f079bc38d305b323cf2ef5a74980d96b19403ba06381c67"
+    },
+    {
+      "path": "spl/controller_config_probe/README.md",
+      "kind": "source",
+      "source": "mainline/spl/controller_config_probe/README.md",
+      "size": 3385,
+      "sha256": "8fd70f7fa108a802d8a525e27881178bb8299112e8f60b505d12f5ec5b82675c"
+    },
+    {
+      "path": "spl/controller_config_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_config_probe/probe.c",
+      "size": 8741,
+      "sha256": "b84ec225492b093c66e75357484d128951452b3fadeee8265ca0760fb5684c7d"
+    },
+    {
+      "path": "spl/controller_config_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/controller_config_probe/probe.ld",
+      "size": 989,
+      "sha256": "203d02d9253944e66dad35960a2703e78e6b0d9b1d9551ce7fbb6a28463c41b6"
+    },
+    {
+      "path": "spl/controller_config_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_config_probe/test_probe.c",
+      "size": 5470,
+      "sha256": "05c1dbc8c5b6d2bbd3839f4a285863e061c538447757c5562ba016ca71e9ce5a"
+    },
+    {
+      "path": "spl/controller_init_read_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_init_read_probe/probe.c",
+      "size": 5252,
+      "sha256": "33f99a93fe8b0245c286b910243dbb15159270639548706027e987dbb8740601"
+    },
+    {
+      "path": "spl/controller_init_read_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/controller_init_read_probe/probe.ld",
+      "size": 1011,
+      "sha256": "e7ca4628a5d831b00092d1a707eab6209c472a60ed8588ea91c14f9ebf57230f"
+    },
+    {
+      "path": "spl/controller_init_read_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_init_read_probe/test_probe.c",
+      "size": 4263,
+      "sha256": "ab6c3d2e95c627c3dcd0b0c3b80d19f860b12012d695a1ec08ad35fe1f615c6f"
+    },
+    {
+      "path": "spl/controller_static_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_probe/probe.c",
+      "size": 7196,
+      "sha256": "dff6215dfcc5c3b1b18a0a61e087f32788bd90bef2ff50562ec6c74221819f6b"
+    },
+    {
+      "path": "spl/controller_static_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_probe/probe.ld",
+      "size": 1291,
+      "sha256": "3ed70cf818b5463743812cb435b15cfad781c0d11283ae75053aaa1e7602fd7a"
+    },
+    {
+      "path": "spl/controller_static_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_probe/test_probe.c",
+      "size": 7160,
+      "sha256": "628e7eaf648e941ce6b9e2dacee52e7eabee11e53531cdca155cbccd2f75d931"
+    },
+    {
+      "path": "spl/controller_static_rollback_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_rollback_probe/probe.c",
+      "size": 6032,
+      "sha256": "ce9fcd859a19e52d91e63cd921574c3735d4e4feda3a46ba3904fe9631b062e2"
+    },
+    {
+      "path": "spl/controller_static_rollback_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_rollback_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/controller_static_rollback_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_rollback_probe/test_probe.c",
+      "size": 6474,
+      "sha256": "849ab932bc06bfd6ce3f72f7ea4abce5ec5d2a01706be03c2e1def6c14da55e4"
+    },
+    {
+      "path": "spl/controller_static_v2_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_v2_probe/probe.c",
+      "size": 7905,
+      "sha256": "e4947313aedf3413da8a73691d50f090c3c54c32ca3c1598ad3e313edd06a2f1"
+    },
+    {
+      "path": "spl/controller_static_v2_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_v2_probe/probe.ld",
+      "size": 1291,
+      "sha256": "3ed70cf818b5463743812cb435b15cfad781c0d11283ae75053aaa1e7602fd7a"
+    },
+    {
+      "path": "spl/controller_static_v2_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/controller_static_v2_probe/test_probe.c",
+      "size": 9522,
+      "sha256": "a389af996b900b827f929c2640d635690fc58d3f8659a8ed659a62f1d579ce9c"
+    },
+    {
+      "path": "spl/cpuclock/a55clock.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/a55clock.c",
+      "size": 7829,
+      "sha256": "b2c4daaa22e519d6a48321913a0836ba6b70a4f30415214f026d2abbcf97c36c"
+    },
+    {
+      "path": "spl/cpuclock/a55clock.h",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/a55clock.h",
+      "size": 1232,
+      "sha256": "a452a312e5914db1c0dfb64b565c44f81f46dd2ed333ec6b7e0bf02151b1eef1"
+    },
+    {
+      "path": "spl/cpuclock/a55clock_d.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/a55clock_d.c",
+      "size": 10560,
+      "sha256": "7b60852c4fb52e048672ff5cfc3cfae3cc008fb83daa3cc734db18c1e85daa25"
+    },
+    {
+      "path": "spl/cpuclock/a55clock_d.h",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/a55clock_d.h",
+      "size": 791,
+      "sha256": "89908c86976549ad3da6b48688e6539ec7a33989b86523535f5d2bc93f59b5a2"
+    },
+    {
+      "path": "spl/cpuclock/cpuclock.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/cpuclock.c",
+      "size": 11953,
+      "sha256": "8a3ea752474bd8565b865a56087b0a761714da3d3d81ec1919f2df2319be27d4"
+    },
+    {
+      "path": "spl/cpuclock/cpuclock.h",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/cpuclock.h",
+      "size": 2733,
+      "sha256": "420603f897b200f3b368532d834935990f2c36acb43a49276467d36c2b508610"
+    },
+    {
+      "path": "spl/cpuclock/cpuclock_c.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/cpuclock_c.c",
+      "size": 12381,
+      "sha256": "e56bb498000365b5cfe36931008b9143fee718caa74c268c95fd089bddccd4ce"
+    },
+    {
+      "path": "spl/cpuclock/cpuclock_c.h",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/cpuclock_c.h",
+      "size": 860,
+      "sha256": "6afe06348036dce648ed4bb8fa759c49a1c5a840a83a1c37490f544820d7e1b6"
+    },
+    {
+      "path": "spl/cpuclock/test_a55clock.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/test_a55clock.c",
+      "size": 6411,
+      "sha256": "b7f5d22b591f58dba4bb87ff39bb9798a9a648e46b2c9c9cbf4387a67b72f83f"
+    },
+    {
+      "path": "spl/cpuclock/test_a55clock_d.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/test_a55clock_d.c",
+      "size": 8201,
+      "sha256": "49e0d00eebab1560110ee5c675afc77a4879bfd80fcda1f7a0795ceac5678f30"
+    },
+    {
+      "path": "spl/cpuclock/test_cpuclock.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/test_cpuclock.c",
+      "size": 8740,
+      "sha256": "4f1e0f5ed83896fdd384bb2d5aed9e7cacd40bd9e09be0fef46126cab81a80db"
+    },
+    {
+      "path": "spl/cpuclock/test_cpuclock_c.c",
+      "kind": "source",
+      "source": "mainline/spl/cpuclock/test_cpuclock_c.c",
+      "size": 9249,
+      "sha256": "8dc77a86b68aeb98528369e7982a349dc5e78fb2844d397081abd9bdf1defd0d"
+    },
+    {
+      "path": "spl/domain_setup_probe/README.md",
+      "kind": "source",
+      "source": "mainline/spl/domain_setup_probe/README.md",
+      "size": 2350,
+      "sha256": "4be31cf16e2f94c7a08fe03347685b91cba8d314b20bdd167f9477ae27135977"
+    },
+    {
+      "path": "spl/domain_setup_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/domain_setup_probe/probe.c",
+      "size": 5493,
+      "sha256": "fcca00f43e613ae6552f16f11bd46ac8478ece618a103dd99c7385b236f923c9"
+    },
+    {
+      "path": "spl/domain_setup_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/domain_setup_probe/probe.ld",
+      "size": 957,
+      "sha256": "b4c3f1e8ae151eb59809719303d3a48b8e86e3f2099f539537f028bc0f706805"
+    },
+    {
+      "path": "spl/early/README.md",
+      "kind": "source",
+      "source": "mainline/spl/early/README.md",
+      "size": 11022,
+      "sha256": "8fa15baba29d5fc2f6ee4306ad50fe943111615dacdda9cae832c9f604ec2181"
+    },
+    {
+      "path": "spl/early/entry.S",
+      "kind": "source",
+      "source": "mainline/spl/early/entry.S",
+      "size": 1396,
+      "sha256": "b9a7118d4a13da0cba99e9523c75cf46521a5b7357040a5fced77edd8069633a"
+    },
+    {
+      "path": "spl/early/entry_diag.S",
+      "kind": "source",
+      "source": "mainline/spl/early/entry_diag.S",
+      "size": 5148,
+      "sha256": "38ff1bf04d2a99e4bf6a8f6485a31b1e70f1b6ebaef17d42d47545660fa28705"
+    },
+    {
+      "path": "spl/early/entry_diag_check.S",
+      "kind": "source",
+      "source": "mainline/spl/early/entry_diag_check.S",
+      "size": 336,
+      "sha256": "58d54d7de7d54257593f869eaa41f717f92d12f8f7fd251bb23e00d5c37be6a6"
+    },
+    {
+      "path": "spl/early/entry_diag_check.ld",
+      "kind": "source",
+      "source": "mainline/spl/early/entry_diag_check.ld",
+      "size": 1276,
+      "sha256": "e7cafe6a1cbcfaf16b7e4242749cb1621d592f32fe0ff223101799d4431132af"
+    },
+    {
+      "path": "spl/early/platform.c",
+      "kind": "source",
+      "source": "mainline/spl/early/platform.c",
+      "size": 1823,
+      "sha256": "f4c7ab8245ef8d346cfd7d97d4c3a990a6c042d8d43c91359dde6cee2af88edf"
+    },
+    {
+      "path": "spl/early/platform.h",
+      "kind": "source",
+      "source": "mainline/spl/early/platform.h",
+      "size": 1137,
+      "sha256": "faadd8ea40fbb48f01add44f2429a00719fd97b3376de5dfdd10e74fbef02d82"
+    },
+    {
+      "path": "spl/early/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/early/probe.c",
+      "size": 4965,
+      "sha256": "5636e2ee210315498dc5e27b9be7f2291a82577f4ac677a06bd353ba68714eda"
+    },
+    {
+      "path": "spl/early/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/early/probe.ld",
+      "size": 954,
+      "sha256": "57baa339040f0e52fd9e77f1e643382097c98db8f82c70b0c129c14338f3dfef"
+    },
+    {
+      "path": "spl/early/test_timer.c",
+      "kind": "source",
+      "source": "mainline/spl/early/test_timer.c",
+      "size": 2445,
+      "sha256": "fbd6a08de2453b16f7bf6ad589c83c63c93b5f99150ad1888aae7174494365b7"
+    },
+    {
+      "path": "spl/early/test_twi.c",
+      "kind": "source",
+      "source": "mainline/spl/early/test_twi.c",
+      "size": 4605,
+      "sha256": "9a502d85b2fd7f051c4cdcbc283e89c0dd1c3ab9ded3e5411eba0a07c9e84ac6"
+    },
+    {
+      "path": "spl/early/timer_init.c",
+      "kind": "source",
+      "source": "mainline/spl/early/timer_init.c",
+      "size": 1656,
+      "sha256": "3815f7e4b55bb936928e765856518e5fbf4c6ef665fb89dbb62d7a9c4d5d8c1a"
+    },
+    {
+      "path": "spl/early/timer_init.h",
+      "kind": "source",
+      "source": "mainline/spl/early/timer_init.h",
+      "size": 1004,
+      "sha256": "118aef6586660a4d8617521273e8effee107cff934f882ca53b4073cd785afb2"
+    },
+    {
+      "path": "spl/early/twi.c",
+      "kind": "source",
+      "source": "mainline/spl/early/twi.c",
+      "size": 3928,
+      "sha256": "a9d9fac6ca5841549a07f6a6eaf8531fe4d0b3f144b691bb4452329224ea6758"
+    },
+    {
+      "path": "spl/early/twi.h",
+      "kind": "source",
+      "source": "mainline/spl/early/twi.h",
+      "size": 1006,
+      "sha256": "e9e7fc586fcb535131e4134230880d3820a58dd72085c0be9c36598b2dccfc63"
+    },
+    {
+      "path": "spl/lpddr4/README.md",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/README.md",
+      "size": 8132,
+      "sha256": "eecaf8c5a61aba43203198f1f134db140e47fa9d52842bdde9b4bb222305e85c"
+    },
+    {
+      "path": "spl/lpddr4/axp8191.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/axp8191.c",
+      "size": 3780,
+      "sha256": "8e12ae0b3e3ec8b971a093c4c946dc44fd46dbf1b1ce7b013725970b7d114b31"
+    },
+    {
+      "path": "spl/lpddr4/axp8191.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/axp8191.h",
+      "size": 972,
+      "sha256": "6e7a528f0a6c4163d9667bea6554c7f5c5db0a8a8ff423f24df43d19e3989ee7"
+    },
+    {
+      "path": "spl/lpddr4/check_domain_prepare_diag.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/check_domain_prepare_diag.py",
+      "size": 3296,
+      "sha256": "17a90cb51f30773155f930a785cf28076d50e3dd699613c2338f4d71ab30f3f0"
+    },
+    {
+      "path": "spl/lpddr4/check_mode_register.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/check_mode_register.py",
+      "size": 2962,
+      "sha256": "d7d782c8aea8fc8f34be9edd20459b08389bf3e326746891977550fe3addb942"
+    },
+    {
+      "path": "spl/lpddr4/check_phy_calibration_diag.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/check_phy_calibration_diag.py",
+      "size": 3177,
+      "sha256": "5dcca4134228c831da55b0cb51858db890959544842f4d68645b96a861f0bc4c"
+    },
+    {
+      "path": "spl/lpddr4/controller.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/controller.c",
+      "size": 3965,
+      "sha256": "1017f4a0c37370a1a5aab45d05d84e8942ee5800cdb78b1d6a70ab5083afba47"
+    },
+    {
+      "path": "spl/lpddr4/controller.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/controller.h",
+      "size": 2058,
+      "sha256": "d42e7955af902cf11ecc4b7982bdb0357a56f235a381384f40504b1680bed339"
+    },
+    {
+      "path": "spl/lpddr4/domain_prepare_diag.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/domain_prepare_diag.c",
+      "size": 3587,
+      "sha256": "b1c25c4feb5c0ea79414e4deb97b2664963c54d4874c57c849e5471d69397957"
+    },
+    {
+      "path": "spl/lpddr4/domain_prepare_diag.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/domain_prepare_diag.h",
+      "size": 2642,
+      "sha256": "33239fc112bc23a2fdf8b26fe116886c646e29328dcb59c7c175caea910322d0"
+    },
+    {
+      "path": "spl/lpddr4/implementation.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/implementation.json",
+      "size": 16945,
+      "sha256": "5bfa08f562cf81c9781d1ca99bb0f6d9c2f289eb0aa953a8d23c6c0b5642c26b"
+    },
+    {
+      "path": "spl/lpddr4/mode_register.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/mode_register.c",
+      "size": 2613,
+      "sha256": "6253cdd36c7262c4dc633e3d3013809c85e0320ccb44d4bd37282edf3d1fed47"
+    },
+    {
+      "path": "spl/lpddr4/mode_register.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/mode_register.h",
+      "size": 2161,
+      "sha256": "549eba68c4e1989e589cfcbe4ba437b001625dc74e36b859123f8e66729ad562"
+    },
+    {
+      "path": "spl/lpddr4/observe_linux.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/observe_linux.c",
+      "size": 2049,
+      "sha256": "9fd36dd6df28b55b20a069764b9b91eb7b8113441b5bd58e2804bd2c222b814b"
+    },
+    {
+      "path": "spl/lpddr4/observe_mrr_linux.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/observe_mrr_linux.c",
+      "size": 3140,
+      "sha256": "cb428d23ce04d59a103f8a4d708de309bb93a9342b4079a654950cfe8b55dfb4"
+    },
+    {
+      "path": "spl/lpddr4/observe_phy_linux.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/observe_phy_linux.c",
+      "size": 955,
+      "sha256": "fcab3a37f45ede7ef843274592b364a32a518c5ae026c24024f09a1a4d756555"
+    },
+    {
+      "path": "spl/lpddr4/observe_timing_linux.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/observe_timing_linux.c",
+      "size": 1458,
+      "sha256": "08a63d10d43beb8a26c0af4cab0ee0412f4820bf959966ba346dc56e13a2de73"
+    },
+    {
+      "path": "spl/lpddr4/phy/README.md",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/README.md",
+      "size": 7586,
+      "sha256": "b90c955c64d91b5ca04e969b9d06de8d02a06d5a123cfc54c42e81dc144f7512"
+    },
+    {
+      "path": "spl/lpddr4/phy/check-result.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/check-result.json",
+      "size": 2300,
+      "sha256": "edd3f066e068d187b2a771066129ba253dd59e8f6b2e77c09e01d542e0c609d9"
+    },
+    {
+      "path": "spl/lpddr4/phy/check.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/check.py",
+      "size": 8375,
+      "sha256": "9ef7ff0f7b7370f36d817f6d2c0d368e280bf7dd1004eab65275db8ac04731e6"
+    },
+    {
+      "path": "spl/lpddr4/phy/check_controller.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/check_controller.py",
+      "size": 2870,
+      "sha256": "0c12d8e07c14d457bddc587d1efeef7c40cc47454ca85d11c8c7f753d029c6f5"
+    },
+    {
+      "path": "spl/lpddr4/phy/check_controller_static.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/check_controller_static.py",
+      "size": 3297,
+      "sha256": "495c1825e5662cf6165ae93634a72370133ff4dde211354fe2055627a837e356"
+    },
+    {
+      "path": "spl/lpddr4/phy/check_controller_static_v2.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/check_controller_static_v2.py",
+      "size": 3382,
+      "sha256": "cae964e6dbef20a268d1a95f912fb100f6a2240bfcb53b8a08fb2b5166c0556b"
+    },
+    {
+      "path": "spl/lpddr4/phy/checked_controller.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/checked_controller.c",
+      "size": 5643,
+      "sha256": "e9e5430d2569d47da6f08d412ef7b297de9fe0dc0baec1abf9355af2e0a8f155"
+    },
+    {
+      "path": "spl/lpddr4/phy/checked_controller.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/checked_controller.h",
+      "size": 3436,
+      "sha256": "85bac3a23e9b5a59ff34c61b9845d9511ab79af9cfa1e5bbe6c88a56a449c36a"
+    },
+    {
+      "path": "spl/lpddr4/phy/clocks.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/clocks.c",
+      "size": 5743,
+      "sha256": "5360dd0cd973a939e318daa7cf4e7cc773f9970f34123cf89e88c6e0cdb0232f"
+    },
+    {
+      "path": "spl/lpddr4/phy/clocks.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/clocks.h",
+      "size": 2130,
+      "sha256": "e51b6881df57f996c2930d7de75c9721b8bb9a9f1ea098213c0f43bf1a53d2e3"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller-init-timing-audit-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller-init-timing-audit-20261114.json",
+      "size": 17048,
+      "sha256": "9f4f97c27bc4da13d195122f86c8a91ba0d37bfb709af7ea8e7f8b3dfd008fa7"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller-inittmg1-mismatch-audit-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller-inittmg1-mismatch-audit-20261114.json",
+      "size": 6223,
+      "sha256": "b141f1a7db293e537f3a73077fce780021d97e4c95a062393c6c1561e223db45"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller-static-contract-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller-static-contract-20261114.json",
+      "size": 6071,
+      "sha256": "6be34f5eb46675b93607ffb15ffdb05218a345add92ec1be5ee1c3fa70deb6eb"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller-static-v2-contract-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller-static-v2-contract-20261114.json",
+      "size": 6754,
+      "sha256": "0d0be673525124524a03d62b8d1ed82c58ac7a4c629791e4a0627e90596e3bb8"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller_static.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller_static.c",
+      "size": 8315,
+      "sha256": "e47e69347fd45fff8037b515d96125718aa07d69b914384d41189b0beead564a"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller_static.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller_static.h",
+      "size": 2881,
+      "sha256": "52f092819f9a48a51028bcb3684535cf9300f7094180df99d5111c145587210a"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller_static_v2.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller_static_v2.c",
+      "size": 8823,
+      "sha256": "67c142468a65aa1dbab475a7fdb83a77cfa27ba443d51fd1a2d786811a073102"
+    },
+    {
+      "path": "spl/lpddr4/phy/controller_static_v2.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/controller_static_v2.h",
+      "size": 3371,
+      "sha256": "c7efc9fe9db706616d568d72bc97852b0c69983fe56b5b894ddba02fc18cd769"
+    },
+    {
+      "path": "spl/lpddr4/phy/host.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/host.c",
+      "size": 11886,
+      "sha256": "926bc186b0d0b2e37d47bf9b24286588807003bdc61c41553dfe5bd7e22c5114"
+    },
+    {
+      "path": "spl/lpddr4/phy/host.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/host.h",
+      "size": 4557,
+      "sha256": "256d672f20ac3f634de15d3f9565706ccf47c96abbfd274c5f21d977c6117c32"
+    },
+    {
+      "path": "spl/lpddr4/phy/pre-release-controller-audit-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/pre-release-controller-audit-20261114.json",
+      "size": 11463,
+      "sha256": "86f1e17e65a0374662c609713972cd9337c6801c1a171ffbfc8fc8fd07baf30b"
+    },
+    {
+      "path": "spl/lpddr4/phy/provenance.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/provenance.json",
+      "size": 12076,
+      "sha256": "058f467897f2835e3b96ed1f299e22000bff0c9049a1b60ba0fcdeac62e55e9e"
+    },
+    {
+      "path": "spl/lpddr4/phy/static-analog-audit-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/static-analog-audit-20261114.json",
+      "size": 9462,
+      "sha256": "42ae7d01745ebbef32e1edbe7ab8a09bbd74ccfb354f20618140086cb7734196"
+    },
+    {
+      "path": "spl/lpddr4/phy/test_checked_controller.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/test_checked_controller.c",
+      "size": 6780,
+      "sha256": "dccc138765d9189f839876e8b377e106d5e5ee9ea45343e925c48cc14598dfb0"
+    },
+    {
+      "path": "spl/lpddr4/phy/test_controller_static.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/test_controller_static.c",
+      "size": 8240,
+      "sha256": "f90564d8c296f2543b41896c1fc4672f61d634898efe3848a9edb7f03529b068"
+    },
+    {
+      "path": "spl/lpddr4/phy/test_controller_static_v2.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/test_controller_static_v2.c",
+      "size": 9426,
+      "sha256": "17d640fa87fcd55fb3472c95140856cd117a7fffcbae05383fb640bfca7c7750"
+    },
+    {
+      "path": "spl/lpddr4/phy/test_host.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy/test_host.c",
+      "size": 21073,
+      "sha256": "fc85a7ea0c8bfe73782494a695b0cc4b536c690462b518dafbab28d6f01dc90b"
+    },
+    {
+      "path": "spl/lpddr4/phy_calibration_diag.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy_calibration_diag.c",
+      "size": 3839,
+      "sha256": "6202b067d4c554b5924c37a3ddc8f24e1c991192efecb6a1b1d4eff8eb8f2864"
+    },
+    {
+      "path": "spl/lpddr4/phy_calibration_diag.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/phy_calibration_diag.h",
+      "size": 3680,
+      "sha256": "9175f4f07468de91fb17ce6fb925100e2d8e2f11875b8361184f34907b95209c"
+    },
+    {
+      "path": "spl/lpddr4/pmu/README.md",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/README.md",
+      "size": 4449,
+      "sha256": "ab0803178075c6c10c20022badd41dcdf7f2219c0dc0935d64dc66d4c458a534"
+    },
+    {
+      "path": "spl/lpddr4/pmu/acsm-execution-boundary-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/acsm-execution-boundary-20261114.json",
+      "size": 6389,
+      "sha256": "53934d58e52b629f0c9a097f6086ea78cdd85f5938cdb6ad9a565f895fdd7193"
+    },
+    {
+      "path": "spl/lpddr4/pmu/analyze_mrr.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/analyze_mrr.py",
+      "size": 7178,
+      "sha256": "db5db653734ed820a2eba8fa5ed531182c2a52883d4344ad7c1291834057045d"
+    },
+    {
+      "path": "spl/lpddr4/pmu/arm-host-training-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/arm-host-training-audit.json",
+      "size": 11105,
+      "sha256": "2bcf9ada44074b368686e4fde0bfea4e9f70f0a27576aa6f60df088add15fafa"
+    },
+    {
+      "path": "spl/lpddr4/pmu/backend-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/backend-audit.json",
+      "size": 8653,
+      "sha256": "07a9a4faa59034265c463afc924980f88862142d7f045c2b5288520e76942af4"
+    },
+    {
+      "path": "spl/lpddr4/pmu/check.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/check.py",
+      "size": 3972,
+      "sha256": "f4adc3a15163389d92b2eaab613eb812be2599120eeb7ddf3cfdfadc94b884d9"
+    },
+    {
+      "path": "spl/lpddr4/pmu/check_commands.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/check_commands.py",
+      "size": 7104,
+      "sha256": "61838fe218582471cc7cf99db823c49450d2da9977c0d602637bfdbd4d240143"
+    },
+    {
+      "path": "spl/lpddr4/pmu/cold-mr-interface-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/cold-mr-interface-audit.json",
+      "size": 3088,
+      "sha256": "9c6c9402aea210ff072dc7c12cc84b388fd4d7e212e43f19deaf2d4fb128ebc0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/cold-reset-hostmux-audit-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/cold-reset-hostmux-audit-20261114.json",
+      "size": 4643,
+      "sha256": "da8f5f73720f70732b1552f1813ccc77eec56f0a47d2079d22ceea1a8d4d259b"
+    },
+    {
+      "path": "spl/lpddr4/pmu/cold_mr.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/cold_mr.c",
+      "size": 8919,
+      "sha256": "18858d333e8243cefa80c0d3380f2d8e32e7bde270077e89ada0ebfb251005ee"
+    },
+    {
+      "path": "spl/lpddr4/pmu/cold_mr.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/cold_mr.h",
+      "size": 3394,
+      "sha256": "e5f05c99a79fa05a13ae1655bb28c83a68f389540b97271c664d3253371ffa30"
+    },
+    {
+      "path": "spl/lpddr4/pmu/command-source-manifest.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/command-source-manifest.json",
+      "size": 813,
+      "sha256": "1ce8ffaf52412707550b1743c2caf3458e3882a4d5c2f1429017bbf4c5e102ec"
+    },
+    {
+      "path": "spl/lpddr4/pmu/commands.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/commands.c",
+      "size": 2602,
+      "sha256": "9bd2baa12bb31fe4758496012069769d71cf393d644c8490f8bdf9eda62e3e1f"
+    },
+    {
+      "path": "spl/lpddr4/pmu/commands.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/commands.h",
+      "size": 1664,
+      "sha256": "a14483e8b906a60bc9da2925afdee2dcf7cbb76aba83020706421be7e9742d0a"
+    },
+    {
+      "path": "spl/lpddr4/pmu/common_message.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/common_message.c",
+      "size": 1613,
+      "sha256": "40a2c4e8b5e0cb56e99d6674388c02c58662c97fa2be48985b969f382aef39d3"
+    },
+    {
+      "path": "spl/lpddr4/pmu/common_message.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/common_message.h",
+      "size": 1537,
+      "sha256": "5a62e8e0b8185952c8f0329de67fd520d896a9dddc605056c78f6526c9bf6b6c"
+    },
+    {
+      "path": "spl/lpddr4/pmu/controller-generation-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/controller-generation-audit.json",
+      "size": 5091,
+      "sha256": "61552d58ff1ac1a772cd66d0b171caf3473ecfe39fef962394114ee07e9aaf37"
+    },
+    {
+      "path": "spl/lpddr4/pmu/domain-access-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/domain-access-audit.json",
+      "size": 11712,
+      "sha256": "077bda1c1f0d9193a8bb468c95a832e160d0746856a342343c34a1c0f7ded1d7"
+    },
+    {
+      "path": "spl/lpddr4/pmu/eye.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/eye.c",
+      "size": 1445,
+      "sha256": "896175c7d680f32c3db0eb034f98551262c5d5506dc6853f1956d190b284babd"
+    },
+    {
+      "path": "spl/lpddr4/pmu/eye.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/eye.h",
+      "size": 1075,
+      "sha256": "e5b16ec1f103a2a0824f6d149c0bfbf0d2b657e6081f8b19a99b7fe511a09da8"
+    },
+    {
+      "path": "spl/lpddr4/pmu/mailbox.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/mailbox.c",
+      "size": 3552,
+      "sha256": "1f94ea125ea600a908a857e1a0af59548293368080a364a77293f2f450b7441f"
+    },
+    {
+      "path": "spl/lpddr4/pmu/mailbox.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/mailbox.h",
+      "size": 2066,
+      "sha256": "40d9175f3096d91cc8cc46152c5ec01c2501d7828e4046395f4350a52d5588d4"
+    },
+    {
+      "path": "spl/lpddr4/pmu/mode-register-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/mode-register-audit.json",
+      "size": 6055,
+      "sha256": "cc44f9ecdcb331a68583a29da4ff9c6df07788729f48e6e4591228b6b3137da4"
+    },
+    {
+      "path": "spl/lpddr4/pmu/pclk-divratio-host-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/pclk-divratio-host-audit.json",
+      "size": 2840,
+      "sha256": "63000245bf95ab280b346916fe8ab4766c41d73a1dfbe8aed27f8b084162ea16"
+    },
+    {
+      "path": "spl/lpddr4/pmu/phy-calibration-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/phy-calibration-audit.json",
+      "size": 10739,
+      "sha256": "d5c90a0cf6317f3fe521b843fd31b3baf9f9b8eb118ed4b1624042da600fb38d"
+    },
+    {
+      "path": "spl/lpddr4/pmu/ports-access-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/ports-access-audit.json",
+      "size": 8289,
+      "sha256": "3469548942cc2bdb2ebba915a2bb03d5f40f9a3032213bbc473e5f72444022a7"
+    },
+    {
+      "path": "spl/lpddr4/pmu/reference/COPYING",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/reference/COPYING",
+      "size": 15171,
+      "sha256": "004cea4db5b9877d2d1cd6e0a8b7ec20428342814503a3b78db08dcc6ad8c74e"
+    },
+    {
+      "path": "spl/lpddr4/pmu/reference/LITEDRAM-LICENSE",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/reference/LITEDRAM-LICENSE",
+      "size": 1765,
+      "sha256": "e0cbd0f879a947a57db15d9165e4bc93af53cd896a338f80f4418eb1e81167d0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/reference/litedram-lpddr4-commands.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/reference/litedram-lpddr4-commands.py",
+      "size": 8982,
+      "sha256": "d35984653bba3a57559becbed72993d992f59d957b714525ba2b237c079e9d1b"
+    },
+    {
+      "path": "spl/lpddr4/pmu/reference/litedram-lpddr5-commands.py",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/reference/litedram-lpddr5-commands.py",
+      "size": 12658,
+      "sha256": "2ef7b0dad58a81eeda69b85fd83ee5633f24cacf5f96efad095965465382c08c"
+    },
+    {
+      "path": "spl/lpddr4/pmu/reference/phy-training-params-lpddr4.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/reference/phy-training-params-lpddr4.h",
+      "size": 20339,
+      "sha256": "79e90e8e3513a07b903450e98f476d222d946da4a2096b15ea93c99cf95c36ac"
+    },
+    {
+      "path": "spl/lpddr4/pmu/sequencer-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/sequencer-audit.json",
+      "size": 11448,
+      "sha256": "481e9f7c99dadb42970584747bd397fc8315d46d8e08aadcc83884e096fd8ca0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/source-manifest.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/source-manifest.json",
+      "size": 703,
+      "sha256": "bc72e894f325cfb1cabaed73fb694e0261ba2194af780c4b196cdfcef0a919a0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/test_cold_mr.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/test_cold_mr.c",
+      "size": 10065,
+      "sha256": "5d49255b14a7e31682da74deee7845ed8cb127c95fa954782b0bff43a5f8fa0c"
+    },
+    {
+      "path": "spl/lpddr4/pmu/test_commands.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/test_commands.c",
+      "size": 3586,
+      "sha256": "45978b23650ef17ab1b7bb09bc5391f4c46cd36782a93dcf38105dd7fb536661"
+    },
+    {
+      "path": "spl/lpddr4/pmu/test_pmu.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/test_pmu.c",
+      "size": 10847,
+      "sha256": "38cce5b4b63c4e70f9937762304a1f4636500d4544c43451fd16cedbb3e5fbc2"
+    },
+    {
+      "path": "spl/lpddr4/pmu/type9-controller-name-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/type9-controller-name-audit.json",
+      "size": 10022,
+      "sha256": "744e0a77b8cb6edf06707c1ed0f96b0f510f15c8af69e7acce379bd9986882c0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/type9-name-correlation-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/type9-name-correlation-audit.json",
+      "size": 5196,
+      "sha256": "d52df74499996dae8b996cdffdc2c456974afdd6e623dbbbd965adb18780fb45"
+    },
+    {
+      "path": "spl/lpddr4/pmu/type9-training-debug-audit.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/type9-training-debug-audit.json",
+      "size": 4174,
+      "sha256": "c7d3bac3d0203e838e6091508ee5e6ca7ca131cb60d831acefd61b9b434de5b0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-2030d-pulse-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-2030d-pulse-review-20261114.json",
+      "size": 2626,
+      "sha256": "c49aaf44cb47d03ab84626313f6912850e827d6c3b34ea029e5655c1648f8709"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-20320-pulse-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-20320-pulse-review-20261114.json",
+      "size": 4675,
+      "sha256": "ad919193053351288cfcc5dd96b729eb267cf96d93b2ff0690517a8fefd6d5bf"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-clock-read-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-clock-read-review-20261114.json",
+      "size": 1078,
+      "sha256": "48c64884a2a8165bcd4faca2f512d54e82a0d831774cf253b78b3e053c2ef0b1"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-codetrack-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-codetrack-review-20261114.json",
+      "size": 774,
+      "sha256": "9f902ff975e5f076161785ff585aa04b1a4a17a3ee072166c233e48ec5719309"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-cold-experiment-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-cold-experiment-review-20261114.json",
+      "size": 6415,
+      "sha256": "32d4f17caed56b638575add78230a6facbb211552c3783da6d98b54fee37a68b"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-companion-microreset-review.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-companion-microreset-review.json",
+      "size": 5682,
+      "sha256": "7231ac2178fc01cfa263a50e22a69b6f9e0fc7cf364bacbe913b334e62663df1"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-dfi-update-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-dfi-update-review-20261114.json",
+      "size": 1080,
+      "sha256": "9d91ab088bc23148c3dc7391eafd602e44485e0e6c3855c4c7606b9d21aa9856"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-inflight-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-inflight-review-20261114.json",
+      "size": 1381,
+      "sha256": "8ab18d5f62e0dacd86322eb2b7a212ac6e30e066d707f28220c1519e1ba1659f"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-longwait-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-longwait-review-20261114.json",
+      "size": 603,
+      "sha256": "4bbcd8c1c3a6edb8d58e3599db3a8ead19faa5d43c1fc56dd6348627e913ec62"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-pubmode-read-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-pubmode-read-review-20261114.json",
+      "size": 1081,
+      "sha256": "fa4b7b6713262c84f80b3a1307ed16b6865a2e319b0fff3d160048766a9dea12"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-pubmode-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-pubmode-review-20261114.json",
+      "size": 1160,
+      "sha256": "a87653226ebfeee50b0745dd23d4aaa40c07355b709a6f35b368c12c36e592f0"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-rawcode-read-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-rawcode-read-review-20261114.json",
+      "size": 1385,
+      "sha256": "41c8134997efe46ff866f4b157d05c90070ae6480c0709b82a0fd4364ad1e47b"
+    },
+    {
+      "path": "spl/lpddr4/pmu/zcal-ucclkfull-review-20261114.json",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/pmu/zcal-ucclkfull-review-20261114.json",
+      "size": 1455,
+      "sha256": "9f076f61e1a46cd87313fb386e16722e83f05190a13b20537219c7d161442358"
+    },
+    {
+      "path": "spl/lpddr4/test_components.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/test_components.c",
+      "size": 6926,
+      "sha256": "bfd6108353a9c746e98b0cc7dad054e6fe0fb01fd68ad1dfd6f27934f2a75f4b"
+    },
+    {
+      "path": "spl/lpddr4/test_domain_prepare_diag.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/test_domain_prepare_diag.c",
+      "size": 4344,
+      "sha256": "c203e76cfd885e969c97e089b8a4776df898b099b3e2b95065cf7c2025131c85"
+    },
+    {
+      "path": "spl/lpddr4/test_mode_register.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/test_mode_register.c",
+      "size": 7373,
+      "sha256": "b5d0fa3fc82e3e5f23db5cae98d57c0d03e430ebdb4609a1b4d0f9d1acdb8dbe"
+    },
+    {
+      "path": "spl/lpddr4/test_phy_calibration_diag.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/test_phy_calibration_diag.c",
+      "size": 5972,
+      "sha256": "2e3b589bc65a5fe7faba5e447305c85a3287c1714f7591042ee1968401cdf9f5"
+    },
+    {
+      "path": "spl/lpddr4/test_timing.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/test_timing.c",
+      "size": 7066,
+      "sha256": "37769082e55c356991b716ae0eabdf2c35aa8fd1bce851f228378577efd57086"
+    },
+    {
+      "path": "spl/lpddr4/timing.c",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/timing.c",
+      "size": 7523,
+      "sha256": "194fd176e4fb78a4e1398e9f3f4a61e29754c056666ee5588b91929af2e4ae57"
+    },
+    {
+      "path": "spl/lpddr4/timing.h",
+      "kind": "source",
+      "source": "mainline/spl/lpddr4/timing.h",
+      "size": 2137,
+      "sha256": "674f8fbcf14ace8e50848da4e8be8950ac359f0a415dedd20dd62cd21fe76468"
+    },
+    {
+      "path": "spl/peripheral/board_power.c",
+      "kind": "source",
+      "source": "mainline/spl/peripheral/board_power.c",
+      "size": 1970,
+      "sha256": "973ef91632754a5623018d8f7899588006644f8294a022efa6663300603d849f"
+    },
+    {
+      "path": "spl/peripheral/board_power.h",
+      "kind": "source",
+      "source": "mainline/spl/peripheral/board_power.h",
+      "size": 564,
+      "sha256": "2777cc09473f4b09197a8715e307cce47aea65a11a39d75baebdb5ffcf8ea865"
+    },
+    {
+      "path": "spl/peripheral/test_board_power.c",
+      "kind": "source",
+      "source": "mainline/spl/peripheral/test_board_power.c",
+      "size": 1749,
+      "sha256": "91cec614a215b791e5e840903d7cc19dc785e5cc44df3b1dd26a51439b5cf77f"
+    },
+    {
+      "path": "spl/phy_acsm_state_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_acsm_state_probe/probe.c",
+      "size": 5864,
+      "sha256": "33d5daf04dc76fb28500e5431e5ec0569d95e527d08cdef9156783a9d6a0b4ff"
+    },
+    {
+      "path": "spl/phy_acsm_state_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_acsm_state_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_acsm_state_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_acsm_state_probe/test_probe.c",
+      "size": 4841,
+      "sha256": "4df9b28e14a83496350e3690048b8df0ec242c504af52b44c3b869287c292436"
+    },
+    {
+      "path": "spl/phy_analog_setup_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_analog_setup_probe/probe.c",
+      "size": 8073,
+      "sha256": "102bbe94dc676e71d84847d92f69d084adfc65f9434d3ec7ec2b748cfbf72994"
+    },
+    {
+      "path": "spl/phy_analog_setup_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_analog_setup_probe/probe.ld",
+      "size": 1000,
+      "sha256": "95cbf2325bbd4227039d59af7c136051511ac9fa8911315d23afb4d28a843c63"
+    },
+    {
+      "path": "spl/phy_analog_setup_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_analog_setup_probe/test_probe.c",
+      "size": 6684,
+      "sha256": "7ccdcbb12e81abe1ab0df40a93dac446636ad94f18e5b5e5490fe4c65dcb110e"
+    },
+    {
+      "path": "spl/phy_release_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_release_probe/probe.c",
+      "size": 5158,
+      "sha256": "93d408366d58c2ff100e04e4941da849140b07d246fa1362b31f5dd108211f24"
+    },
+    {
+      "path": "spl/phy_release_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_release_probe/probe.ld",
+      "size": 942,
+      "sha256": "f3a625ae1191ceb999a6b2a64ebd46316644b4c90c8b87e1f57380d890706b0b"
+    },
+    {
+      "path": "spl/phy_release_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_release_probe/test_probe.c",
+      "size": 2469,
+      "sha256": "af74f24148b7e8c09dd04854774d41b6830b1224c1f4c2334cc3dc2d66131015"
+    },
+    {
+      "path": "spl/phy_static_read_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_static_read_probe/probe.c",
+      "size": 5570,
+      "sha256": "1d47eb67e35ec98ae5d2360c613c48bc40018ed215dd67eb1c4610e2585b7abe"
+    },
+    {
+      "path": "spl/phy_static_read_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_static_read_probe/probe.ld",
+      "size": 942,
+      "sha256": "f3a625ae1191ceb999a6b2a64ebd46316644b4c90c8b87e1f57380d890706b0b"
+    },
+    {
+      "path": "spl/phy_static_read_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_static_read_probe/test_probe.c",
+      "size": 3909,
+      "sha256": "c22a3ceec7aa929e96b21918e453020e852dce63d0e8835be1cfaf0bcfc9636b"
+    },
+    {
+      "path": "spl/phy_zcal_clock_read_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_clock_read_probe/probe.c",
+      "size": 5592,
+      "sha256": "59f128f3b7dbd531cdfd853363aa5505baa66ea62b4a3daa6aa854369fbd8c15"
+    },
+    {
+      "path": "spl/phy_zcal_clock_read_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_clock_read_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_clock_read_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_clock_read_probe/test_probe.c",
+      "size": 4405,
+      "sha256": "4733c4062d4749c728835c6a9cc7ed3c55cc15e6be577e1d5a958d962fee9df8"
+    },
+    {
+      "path": "spl/phy_zcal_codetrack_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_codetrack_probe/probe.c",
+      "size": 7766,
+      "sha256": "0d172c7135aec148cfff348a4eeb005e48179dabc0ca93d248e7b593cf669217"
+    },
+    {
+      "path": "spl/phy_zcal_codetrack_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_codetrack_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_codetrack_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_codetrack_probe/test_probe.c",
+      "size": 6502,
+      "sha256": "ecb80c3f79d271f96c85db64aea4a9ee3f00d00f92aaf97f568344d7ec83e840"
+    },
+    {
+      "path": "spl/phy_zcal_companion_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_companion_probe/probe.c",
+      "size": 6897,
+      "sha256": "dbd9f8f11e11c06853ec8d05449b546a47ec1ab5442a25ad887c73d92afcb77d"
+    },
+    {
+      "path": "spl/phy_zcal_companion_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_companion_probe/probe.ld",
+      "size": 1268,
+      "sha256": "6aefdff685315ec6deaa491ce01109b1a95bba7a50578d22ecc7395ce15942d4"
+    },
+    {
+      "path": "spl/phy_zcal_companion_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_companion_probe/test_probe.c",
+      "size": 5396,
+      "sha256": "2c831273ffa1410fdb983197511ab3f8a024b5a07efb078b114f1b2104d6d0da"
+    },
+    {
+      "path": "spl/phy_zcal_dfi_update_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_dfi_update_probe/probe.c",
+      "size": 5919,
+      "sha256": "638c81855d9d352a99144cf37b171299de72ffbbae8615683da28be635de8dc9"
+    },
+    {
+      "path": "spl/phy_zcal_dfi_update_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_dfi_update_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_dfi_update_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_dfi_update_probe/test_probe.c",
+      "size": 2327,
+      "sha256": "bc5fce79120555b50d413de6b53f9c5ea44ce49030a8856c8edf8d57ce30f9a5"
+    },
+    {
+      "path": "spl/phy_zcal_inflight_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_inflight_probe/probe.c",
+      "size": 7437,
+      "sha256": "3bfb31ddec0e167332b3fc7a2c656adf2678b6465cc0fcf6bf1d423e9d70432a"
+    },
+    {
+      "path": "spl/phy_zcal_inflight_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_inflight_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_inflight_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_inflight_probe/test_probe.c",
+      "size": 6135,
+      "sha256": "a3b40a43fd14485c87f004d8d310951802412203ea6d774eb3e408cdd6f9a2b7"
+    },
+    {
+      "path": "spl/phy_zcal_longwait_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_longwait_probe/probe.c",
+      "size": 7765,
+      "sha256": "72d241debc4bcc89935d162397166c98e77a19c50348a1ce71d93f7320527e07"
+    },
+    {
+      "path": "spl/phy_zcal_longwait_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_longwait_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_longwait_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_longwait_probe/test_probe.c",
+      "size": 6503,
+      "sha256": "3d56b24e696b998485aa2b805bda36dc05c96a1588d7507264d187c87fd0d6f7"
+    },
+    {
+      "path": "spl/phy_zcal_precompanion_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_precompanion_probe/probe.c",
+      "size": 7285,
+      "sha256": "1870848a634e353e6941923be23d27cf491656aa5b09e3abfcb11cc2ff57bb7b"
+    },
+    {
+      "path": "spl/phy_zcal_precompanion_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_precompanion_probe/probe.ld",
+      "size": 1268,
+      "sha256": "6aefdff685315ec6deaa491ce01109b1a95bba7a50578d22ecc7395ce15942d4"
+    },
+    {
+      "path": "spl/phy_zcal_precompanion_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_precompanion_probe/test_probe.c",
+      "size": 5871,
+      "sha256": "5886f3dedba74c06cd9dceca954c59ca10e71cc94c17e4742b092e0be9a4e6aa"
+    },
+    {
+      "path": "spl/phy_zcal_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_probe/probe.c",
+      "size": 5963,
+      "sha256": "20731b22d8179bc229c808c4090334b1a260727f2f369ce16f1783856c2acbab"
+    },
+    {
+      "path": "spl/phy_zcal_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_probe/probe.ld",
+      "size": 942,
+      "sha256": "f3a625ae1191ceb999a6b2a64ebd46316644b4c90c8b87e1f57380d890706b0b"
+    },
+    {
+      "path": "spl/phy_zcal_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_probe/test_probe.c",
+      "size": 2495,
+      "sha256": "9cc14a2fa488690090a461fe2530e535977878c876bf9252e65da150341d2028"
+    },
+    {
+      "path": "spl/phy_zcal_pubmode_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_pubmode_probe/probe.c",
+      "size": 7978,
+      "sha256": "01c063ca6f3927381f98d7c6b68b7a81efc1b8644f229391b439500539f5f5cf"
+    },
+    {
+      "path": "spl/phy_zcal_pubmode_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_pubmode_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_pubmode_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_pubmode_probe/test_probe.c",
+      "size": 3353,
+      "sha256": "0486f3fa97213a2e56ab97e24665101394f684eca404738d52eef1d7466a2acb"
+    },
+    {
+      "path": "spl/phy_zcal_pubmode_read_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_pubmode_read_probe/probe.c",
+      "size": 5600,
+      "sha256": "b6b257c0fc0a420fcd655be0805052e043a7a15aa394590b2e049b0dcb4dbf87"
+    },
+    {
+      "path": "spl/phy_zcal_pubmode_read_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_pubmode_read_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_pubmode_read_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_pubmode_read_probe/test_probe.c",
+      "size": 4407,
+      "sha256": "b97dc53e8439e40b44a3e19df990ba52e8e9e171d52ba5cf168d1ac98ec55ab2"
+    },
+    {
+      "path": "spl/phy_zcal_rate_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_rate_probe/probe.c",
+      "size": 6475,
+      "sha256": "cdfe3058c5b727090eb2f28009a24dd38787c507b19cdb370a5c36c7efe3600c"
+    },
+    {
+      "path": "spl/phy_zcal_rate_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_rate_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_rate_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_rate_probe/test_probe.c",
+      "size": 3463,
+      "sha256": "07cd6ab5567688a652aab7da82205e558e545b608472336e213556a85f4c6a05"
+    },
+    {
+      "path": "spl/phy_zcal_rawcode_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_rawcode_probe/probe.c",
+      "size": 5585,
+      "sha256": "f814fa611cfb0e7f2a8862e6ee29bf23fcc456e9242e5049218ba33c9468b7a3"
+    },
+    {
+      "path": "spl/phy_zcal_rawcode_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_rawcode_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_rawcode_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_rawcode_probe/test_probe.c",
+      "size": 4402,
+      "sha256": "0e28a056d97a4cab4c9603e8c91dc384d6d63aef40fc2984fd6496a3b2115b6c"
+    },
+    {
+      "path": "spl/phy_zcal_stall_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_stall_probe/probe.c",
+      "size": 6034,
+      "sha256": "cb6cc2e8824afc61e94368dfe9d7c88ec98352226a69d8f93ba91b514c12e886"
+    },
+    {
+      "path": "spl/phy_zcal_stall_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_stall_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_stall_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_stall_probe/test_probe.c",
+      "size": 2673,
+      "sha256": "aa1b49f526aeb6cc92be467dc683eaa576985da379d9bd412674e55ead7b98e9"
+    },
+    {
+      "path": "spl/phy_zcal_state_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_state_probe/probe.c",
+      "size": 5658,
+      "sha256": "b6a07be66f4305399e6b7715048fbe246beebcc0eebe53d80620a5ea2e8e82dd"
+    },
+    {
+      "path": "spl/phy_zcal_state_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_state_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_state_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_state_probe/test_probe.c",
+      "size": 4330,
+      "sha256": "5b2d35eb2db44e812e1e75d8ad2343c6d2e5aecabf6d6d91e3a9d3a9a559a40c"
+    },
+    {
+      "path": "spl/phy_zcal_ucclkfull_probe/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_ucclkfull_probe/probe.c",
+      "size": 7962,
+      "sha256": "3a3f46d04d62884e321f6ff0cfead419f26c59098c4989d2560795664939caba"
+    },
+    {
+      "path": "spl/phy_zcal_ucclkfull_probe/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_ucclkfull_probe/probe.ld",
+      "size": 1291,
+      "sha256": "8f5f83eb3134bc944a2b3620671bfc93f34a469c97db50c874eaa66aed558cf0"
+    },
+    {
+      "path": "spl/phy_zcal_ucclkfull_probe/test_probe.c",
+      "kind": "source",
+      "source": "mainline/spl/phy_zcal_ucclkfull_probe/test_probe.c",
+      "size": 3441,
+      "sha256": "4971cbb74fd1cf046032bb52abac1746bcd13846fab0df67f6e71086805d80fb"
+    },
+    {
+      "path": "spl/storage/emmc.c",
+      "kind": "source",
+      "source": "mainline/spl/storage/emmc.c",
+      "size": 6321,
+      "sha256": "5b7081a6c532f6a8c0012cc76ba66f19407ae723a5f5dc09db94d4ceaad2d116"
+    },
+    {
+      "path": "spl/storage/emmc.h",
+      "kind": "source",
+      "source": "mainline/spl/storage/emmc.h",
+      "size": 1399,
+      "sha256": "2a836887bcf91f4d350f03daf811f06e5441fb6fdd8d913908bb60fb47d5b616"
+    },
+    {
+      "path": "spl/storage/implementation.json",
+      "kind": "source",
+      "source": "mainline/spl/storage/implementation.json",
+      "size": 2182,
+      "sha256": "5de39f9bba54c8f17bf57e50c026b4475adf3f1e6939ebeef1b302cf0f212c48"
+    },
+    {
+      "path": "spl/storage/test_emmc.c",
+      "kind": "source",
+      "source": "mainline/spl/storage/test_emmc.c",
+      "size": 5305,
+      "sha256": "f733f730b819c392df540c6b9786a7045a75a5750f16ab8d697bae24f25707b9"
+    },
+    {
+      "path": "spl/vendor_ddr/boot.ld",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/boot.ld",
+      "size": 1091,
+      "sha256": "a41bee41191aee688567ef95e237ed55dfeaacaf36bd8119e802d864d1733276"
+    },
+    {
+      "path": "spl/vendor_ddr/emmc_boot.c",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/emmc_boot.c",
+      "size": 5331,
+      "sha256": "35a5584b2d131803ac797607321feb09c803872019746ab8516ce273b7c766b7"
+    },
+    {
+      "path": "spl/vendor_ddr/entry_boot.S",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/entry_boot.S",
+      "size": 6485,
+      "sha256": "72c7ef0d18e597e874e0cf42c3cac75051c6b0a70246d85cfebf79ee03d35662"
+    },
+    {
+      "path": "spl/vendor_ddr/handoff32.S",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/handoff32.S",
+      "size": 1310,
+      "sha256": "66936bdd138dc3bb225441c9cfea30dde9a945ecc6fdbbe3d97c7ca02944110f"
+    },
+    {
+      "path": "spl/vendor_ddr/probe.c",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/probe.c",
+      "size": 7599,
+      "sha256": "9d70b260358ca1dba8028f2f1134d889205f7008bc74a740d902536cebffba6a"
+    },
+    {
+      "path": "spl/vendor_ddr/probe.ld",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/probe.ld",
+      "size": 1067,
+      "sha256": "47e27f6f604d22b8c8ea488e51685b46790866316b58abe627bc5963dd0044d9"
+    },
+    {
+      "path": "spl/vendor_ddr/stage64.S",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/stage64.S",
+      "size": 772,
+      "sha256": "dece89faf0c24a14749aff17b9cc6e7c69d77bcb840ab7e9e3ffde273253792f"
+    },
+    {
+      "path": "spl/vendor_ddr/stage64.c",
+      "kind": "source",
+      "source": "mainline/spl/vendor_ddr/stage64.c",
+      "size": 1488,
+      "sha256": "ca6aacb06da6b25421c3ef4681947bb371933365481172d9d45b1e7d0a70ff25"
+    },
+    {
+      "path": "tools/build_source_uboot.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot.sh",
+      "size": 2804,
+      "sha256": "4aed3d2d18fd9e2b8351d4bb58ed1c141f21638cd9756a505f2a7d84c3a84314"
+    },
+    {
+      "path": "tools/build_source_uboot_cpu.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot_cpu.sh",
+      "size": 4368,
+      "sha256": "fc3bcfdea07f328774a9d444b3a28fc39464db9bfd88914ea65fc5aca3f4a9c6"
+    },
+    {
+      "path": "tools/build_source_uboot_cpu_b2.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot_cpu_b2.sh",
+      "size": 4988,
+      "sha256": "693a479d7958ca77c4606263e7eda4f145c009d7b289a92299fbeadf0031bb8b"
+    },
+    {
+      "path": "tools/build_source_uboot_cpu_c.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot_cpu_c.sh",
+      "size": 5484,
+      "sha256": "c7ea5b88644a699962584df1951164868b878d86f283d104d2ed1b0b1722b6fb"
+    },
+    {
+      "path": "tools/build_source_uboot_cpu_d.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot_cpu_d.sh",
+      "size": 5845,
+      "sha256": "dadcf7a063efe231ff8ee7616a8d39d3a992abef28541d1978fa6a4fed765c34"
+    },
+    {
+      "path": "tools/build_source_uboot_cpu_r1.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot_cpu_r1.sh",
+      "size": 5409,
+      "sha256": "b6fffdcd66002c85c91e8a28a929a90ff08df671a241a876fa12fa19d3293a56"
+    },
+    {
+      "path": "tools/build_source_uboot_source_v11.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_source_uboot_source_v11.sh",
+      "size": 7314,
+      "sha256": "dc45d334995327a32442de4b8b44549bed2ac038af15b10039fee9b00bbcfd22"
+    },
+    {
+      "path": "tools/build_t736_emmc_spl.py",
+      "kind": "source",
+      "source": "mainline/tools/build_t736_emmc_spl.py",
+      "size": 5120,
+      "sha256": "2baa42c2a42c6e261b237eb0df20b9c23d74b0454defdb961a027f4a83443525"
+    },
+    {
+      "path": "tools/build_t736_vendor_ddr.py",
+      "kind": "source",
+      "source": "mainline/tools/build_t736_vendor_ddr.py",
+      "size": 3086,
+      "sha256": "471a9ea8c08803d19a8dcf93503c6894cbccbd11412a4277483ea3b4796f1fd4"
+    },
+    {
+      "path": "tools/build_tfa_independent_candidate.sh",
+      "kind": "source",
+      "source": "mainline/tools/build_tfa_independent_candidate.sh",
+      "size": 1658,
+      "sha256": "1d81efd5a4ecd125ac0023f9a5c9b562a77345f5ba4c5b69400c947d75c363af"
+    },
+    {
+      "path": "tools/check_lpddr4_components.py",
+      "kind": "source",
+      "source": "mainline/tools/check_lpddr4_components.py",
+      "size": 3842,
+      "sha256": "dd057d81ec0f30546e432453baaf680da10c7e52fe6187f77170dd2614973ed3"
+    },
+    {
+      "path": "tools/check_lpddr4_timing.py",
+      "kind": "source",
+      "source": "mainline/tools/check_lpddr4_timing.py",
+      "size": 4144,
+      "sha256": "45d0305d2e736175fff93c8f03eed39245d3b1865425f9fe9df98fbde70ed02d"
+    },
+    {
+      "path": "tools/check_spl_emmc.py",
+      "kind": "source",
+      "source": "mainline/tools/check_spl_emmc.py",
+      "size": 1867,
+      "sha256": "19ac52df62692822e27dfe2f60b0f2d346d37f2b8bd9f230fbf9320b5a4112c7"
+    },
+    {
+      "path": "tools/pack_t736_source_boot.py",
+      "kind": "source",
+      "source": "mainline/tools/pack_t736_source_boot.py",
+      "size": 8462,
+      "sha256": "e17fc54ece2583153edcc1c3339625c28e64768202f8a45ccb4c135ac69594ae"
+    },
+    {
+      "path": "userpatches/u-boot/u-boot-t736-mainline/0001-t736-uart-memory-mmc.patch",
+      "kind": "source",
+      "source": "mainline/userpatches/u-boot/u-boot-t736-mainline/0001-t736-uart-memory-mmc.patch",
+      "size": 13988,
+      "sha256": "378d2bf542bdfbc470caede39f856b45a4231aaa01941a0bb5899b367c06a923"
+    }
+  ]
+}
